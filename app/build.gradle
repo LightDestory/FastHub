@@ -7,30 +7,30 @@ apply plugin: 'com.novoda.build-properties'
 
 buildProperties {
     secrets {
-        using rootProject.file('release_gradle.properties')
+        if (rootProject.file('release_gradle.properties').exists()) {
+            using rootProject.file('release_gradle.properties')
+        }
     }
 }
 
 android {
     compileSdkVersion 29
+    buildToolsVersion "30.0.3"
     defaultConfig {
         applicationId "com.fastaccess.github.revival"
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 474
         versionName "4.7.4"
-        buildConfigString "GITHUB_CLIENT_ID", (buildProperties.secrets['github_client_id']).string
-        buildConfigString "GITHUB_SECRET", (buildProperties.secrets['github_secret']).string
-        buildConfigString "IMGUR_CLIENT_ID", (buildProperties.secrets['imgur_client_id']).string
-        buildConfigString "IMGUR_SECRET", (buildProperties.secrets['imgur_secret']).string
+        if (rootProject.file('release_gradle.properties').exists()) {
+            buildConfigString "GITHUB_CLIENT_ID", (buildProperties.secrets['github_client_id']).string
+            buildConfigString "GITHUB_SECRET", (buildProperties.secrets['github_secret']).string
+            buildConfigString "IMGUR_CLIENT_ID", (buildProperties.secrets['imgur_client_id']).string
+            buildConfigString "IMGUR_SECRET", (buildProperties.secrets['imgur_secret']).string
+        }
         buildConfigField "String", "REST_URL", '"https://api.github.com/"'
         buildConfigField "String", "IMGUR_URL", '"https://api.imgur.com/3/"'
         multiDexEnabled true
-        javaCompileOptions {
-            annotationProcessorOptions {
-                includeCompileClasspath true
-            }
-        }
     }
 
     buildTypes {
@@ -65,9 +65,15 @@ android {
         xmlReport true
         disable 'InvalidPackage'
     }
+
     compileOptions {
+        encoding "UTF-8"
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 
     configurations {
@@ -75,84 +81,153 @@ android {
         all*.exclude group: 'org.jetbrains', module: 'annotations-java5'
     }
 
-    packagingOptions { exclude 'META-INF/rxjava.properties' }
-
-    dexOptions {
-        jumboMode true
-        javaMaxHeapSize "4g"
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
     }
-
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
-}
-
-repositories {
-    maven { url "https://jitpack.io" }
 }
 
 dependencies {
+/** Kotlin **/
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
+
+
+/** AndroidX **/
     implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation 'com.google.android.material:material:1.4.0'
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
-    implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.2.1'
-    implementation 'androidx.legacy:legacy-preference-v14:1.0.0'
     implementation 'androidx.browser:browser:1.3.0'
-    implementation 'androidx.palette:palette-ktx:1.0.0'
-    implementation 'androidx.annotation:annotation:1.2.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
     implementation 'androidx.core:core-ktx:1.6.0'
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
-    implementation "net.grandcentrix.thirtyinch:thirtyinch:${thirtyinchVersion}"
-    implementation "net.grandcentrix.thirtyinch:thirtyinch-rx2:${thirtyinchVersion}"
-    implementation "com.squareup.retrofit2:retrofit:${retrofit}"
-    implementation "com.squareup.retrofit2:converter-gson:${retrofit}"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:${retrofit}"
-    implementation "com.squareup.retrofit2:converter-scalars:${retrofit}"
-    implementation "com.github.bumptech.glide:glide:${glideVersion}"
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    implementation 'com.google.android.material:material:1.4.0'
+
+
+/** Third-party **/
+
+/**** Frontend (UI) ****/
+    // Image loading and caching library
+    def glideVersion = '4.12.0'
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
+    kapt "com.github.bumptech.glide:compiler:$glideVersion"
+
+    // Android rounded, circle, and path custom ImageViews
     implementation 'cn.gavinliu:ShapedImageView:0.8.7'
-    implementation "com.jakewharton:butterknife:${butterKnifeVersion}"
+
+    // Bottom Navigation widget component
+    // Note: Replace with official Google Material BottomNavigationView?
     implementation 'it.sephiroth.android.library.bottomnavigation:bottom-navigation:2.0.2'
+
+    // Toasts on steroids
+    implementation 'com.github.GrenderG:Toasty:1.1.3'
+
+    // Retain picker instances on orientation change
+    // Note: Replace with Material Components's DatePicker and TimePicker?
+    implementation 'com.github.k0shk0sh:RetainedDateTimePickers:1.0.2'
+
+    // Beautiful "About" screen
+    implementation 'com.github.daniel-stoneuk:material-about-library:2.1.0'
+
+    // Custom view for GitHub's contribution graph (made for FastHub)
+    implementation 'io.github.kaustubhpatange:github-contribution-view:0.5'
+
+    // Shows internally used libraries
+    implementation('com.mikepenz:aboutlibraries:5.9.7@aar') {
+        transitive = true
+    }
+
+    // Creates app shortcuts from annotations
+    def shortbreadVersion = '1.0.1'
+    implementation "com.github.matthiasrobbers:shortbread:$shortbreadVersion"
+    kapt "com.github.matthiasrobbers:shortbread-compiler:$shortbreadVersion"
+
+    // Android color picker library
+    implementation 'petrov.kristiyan:colorpicker-library:1.1.4'
+
+
+/**** Backend (Logic) ****/
+    // MVP library for Android
+    // NOTE: Deprecated!
+    def thirtyinchVersion = '1.0.1'
+    implementation "net.grandcentrix.thirtyinch:thirtyinch:$thirtyinchVersion"
+    implementation "net.grandcentrix.thirtyinch:thirtyinch-rx2:$thirtyinchVersion"
+
+    // Type-safe HTTP client for Java/Android (uses OkHttp)
+    def retrofitVersion = '2.9.0'
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-scalars:$retrofitVersion"
+
+    // HTTP client
+    // An OkHttp interceptor which logs HTTP request and response data
+    def okhttpVersion = '4.2.2'
+    implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
+
+    // Bind Android views and callbacks to fields and methods
+    // Note: Deprecated in favor of view binding
+    def butterKnifeVersion = '10.2.3'
+    implementation "com.jakewharton:butterknife:$butterKnifeVersion"
+    kapt "com.jakewharton:butterknife-compiler:$butterKnifeVersion"
+
+    // Reactive extensions for the JVM
     implementation 'io.reactivex.rxjava2:rxjava:2.2.15'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.2'
+
+    // Stream API from Java 8 rewritten on iterators for Java 7 and below
     implementation 'com.annimon:stream:1.1.9'
-    implementation 'com.github.GrenderG:Toasty:1.1.3'
-    implementation 'com.github.k0shk0sh:RetainedDateTimePickers:1.0.2'
-    implementation 'com.github.daniel-stoneuk:material-about-library:2.1.0'
-    implementation 'io.github.kaustubhpatange:github-contribution-view:0.5'
-    implementation "io.requery:requery:${requery}"
-    implementation "io.requery:requery-android:${requery}"
-    implementation('com.mikepenz:aboutlibraries:5.9.7@aar') { transitive = true }
+
+    // Object mapping and SQL generator for Java/Kotlin/Android
+    def requeryVersion = '1.6.1'
+    implementation "io.requery:requery:$requeryVersion"
+    implementation "io.requery:requery-android:$requeryVersion"
+    kapt "io.requery:requery-processor:$requeryVersion"
+
+    // Android HTML rendering library with CSS support
     implementation 'com.github.nightwhistler:HtmlSpanner:0.4'
+
+    // HTML parser
     implementation 'net.sourceforge.htmlcleaner:htmlcleaner:2.2'
-    implementation 'com.github.matthiasrobbers:shortbread:1.0.1'
-    implementation "com.atlassian.commonmark:commonmark:${commonmark}"
-    implementation "com.atlassian.commonmark:commonmark-ext-autolink:${commonmark}"
-    implementation "com.atlassian.commonmark:commonmark-ext-gfm-strikethrough:${commonmark}"
-    implementation "com.atlassian.commonmark:commonmark-ext-gfm-tables:${commonmark}"
-    implementation "com.atlassian.commonmark:commonmark-ext-ins:${commonmark}"
-    implementation "com.atlassian.commonmark:commonmark-ext-yaml-front-matter:${commonmark}"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlin_version}"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1"
+
+    // Java HTML parser
     implementation 'org.jsoup:jsoup:1.12.1'
-    implementation "com.evernote:android-state:${state_version}"
-    implementation "petrov.kristiyan:colorpicker-library:1.1.4"
-    implementation 'com.apollographql.apollo:apollo-rx2-support:1.2.2'
-    implementation("com.apollographql.apollo:apollo-runtime:1.2.2")
+
+    // Java library for parsing and rendering CommonMark (Markdown)
+    def commonMarkVersion = '0.15.2'
+    implementation "com.atlassian.commonmark:commonmark:$commonMarkVersion"
+    implementation "com.atlassian.commonmark:commonmark-ext-autolink:$commonMarkVersion"
+    implementation "com.atlassian.commonmark:commonmark-ext-gfm-strikethrough:$commonMarkVersion"
+    implementation "com.atlassian.commonmark:commonmark-ext-gfm-tables:$commonMarkVersion"
+    implementation "com.atlassian.commonmark:commonmark-ext-ins:$commonMarkVersion"
+    implementation "com.atlassian.commonmark:commonmark-ext-yaml-front-matter:$commonMarkVersion"
+
+    // Save objects in a Bundle without any boilerplate
+    // Note: Deprecated!
+    def stateVersion = '1.4.1'
+    implementation "com.evernote:android-state:$stateVersion"
+    kapt "com.evernote:android-state-processor:$stateVersion"
+
+    // Strongly-typed, caching GraphQL client for Java/Kotlin/Android
+    implementation "com.apollographql.apollo:apollo-runtime:$apollo_version"
+    implementation "com.apollographql.apollo:apollo-rx2-support:$apollo_version"
+
+    // Get the market name of an Android device
     implementation 'com.jaredrummler:android-device-names:1.1.9'
+
+    // Android library to handle software keyboard visibility change event
     implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.1.0'
+
+    // Getter/Setter with annotations
+    def lombokVersion = '1.18.20'
+    compileOnly "org.projectlombok:lombok:$lombokVersion"
+    kapt "org.projectlombok:lombok:$lombokVersion"
+
+
+/** Flavor libraries **/
+    // Powerful debugging tool for inspecting and modifying lots of things
     debugImplementation 'com.github.whataa:pandora:2.0.6'
     releaseImplementation 'com.github.whataa:pandora-no-op:2.0.3'
-
-    compileOnly "org.projectlombok:lombok:${lombokVersion}"
-
-    kapt "org.projectlombok:lombok:${lombokVersion}"
-    kapt "com.evernote:android-state-processor:${state_version}"
-    kapt "com.jakewharton:butterknife-compiler:${butterKnifeVersion}"
-    kapt 'com.github.matthiasrobbers:shortbread-compiler:1.0.1'
-    kapt "io.requery:requery-processor:${requery}"
-    kapt "com.github.bumptech.glide:compiler:$glideVersion"
 }

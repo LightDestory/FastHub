@@ -1,38 +1,29 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     ext {
-        butterKnifeVersion = '10.2.3'
-        state_version = '1.4.1'
-        lombokVersion = '1.18.20'
-        supportVersion = "27.1.0"
-        thirtyinchVersion = '1.0.1'
-        retrofit = '2.9.0'
-        junitVersion = '4.12'
-        mockitoVersion = '1.10.19'
-        assertjVersion = '2.5.0'
-        espresseVersion = '2.2.2'
-        requery = '1.6.1'
         kotlin_version = '1.4.32'
-        commonmark = '0.15.2'
-        glideVersion = '4.12.0'
+        apollo_version = '1.2.2'
     }
     repositories {
         google()
-        jcenter()
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+        gradlePluginPortal()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.4'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin_version}"
+        classpath 'com.android.tools.build:gradle:7.0.2'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.novoda:gradle-build-properties-plugin:0.4.1'
-        classpath 'com.apollographql.apollo:apollo-gradle-plugin:1.2.2'
+        classpath "com.apollographql.apollo:apollo-gradle-plugin:$apollo_version"
     }
 }
 
 allprojects {
     repositories {
         google()
-        jcenter()
         mavenCentral()
+        maven { url "https://jitpack.io" }
+        gradlePluginPortal()
     }
 }
 
