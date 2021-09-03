@@ -28,7 +28,6 @@
         <item name="colorControlNormal">?colorAccent</item>
         <item name="actionModeBackground">?colorPrimary</item>
         <item name="windowActionModeOverlay">true</item>
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
         <item name="android:textColorPrimary">#212121</item>
         <item name="android:textColorSecondary">#727272</item>

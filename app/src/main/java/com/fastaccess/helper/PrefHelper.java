@@ -2,9 +2,10 @@ package com.fastaccess.helper;
 
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
 
 import com.fastaccess.App;
 
