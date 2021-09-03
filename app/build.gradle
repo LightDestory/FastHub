@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'com.apollographql.android'
+apply plugin: 'com.apollographql.apollo'
 apply plugin: 'com.novoda.build-properties'
 
 buildProperties {
@@ -31,6 +31,19 @@ android {
         buildConfigField "String", "REST_URL", '"https://api.github.com/"'
         buildConfigField "String", "IMGUR_URL", '"https://api.imgur.com/3/"'
         multiDexEnabled true
+    }
+
+    apollo {
+        service("github") {
+            sourceFolder.set("github")
+            rootPackageName.set("github")
+        }
+        onCompilationUnit {
+            graphqlSourceDirectorySet.srcDirs += "/src/main/graphql/github"
+            graphqlSourceDirectorySet.include("**/*.graphql")
+            schemaFile = file("src/main/graphql/github/schema.json")
+            rootPackageName = "github"
+        }
     }
 
     buildTypes {

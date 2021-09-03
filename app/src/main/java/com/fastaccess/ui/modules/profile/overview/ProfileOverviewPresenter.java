@@ -8,8 +8,6 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.apollographql.apollo.ApolloCall;
-import com.apollographql.apollo.api.Response;
-import com.apollographql.apollo.exception.ApolloException;
 import com.apollographql.apollo.rx2.Rx2Apollo;
 import com.fastaccess.data.dao.model.Login;
 import com.fastaccess.data.dao.model.User;
