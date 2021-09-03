@@ -81,7 +81,7 @@ class RepoProjectPresenter : BasePresenter<RepoProjectMvp.View>(), RepoProjectMv
                 makeRestCall(Rx2Apollo.from(apollo.query(query))
                     .flatMap { response ->
                         val list = arrayListOf<RepoProjectsOpenQuery.Node>()
-                        response.data()?.repository()?.let { repos ->
+                        response.data?.repository()?.let { repos ->
                             repos.projects().let {
                                 lastPage = if (it.pageInfo().hasNextPage()) Int.MAX_VALUE else 0
                                 pages.clear()
@@ -111,7 +111,7 @@ class RepoProjectPresenter : BasePresenter<RepoProjectMvp.View>(), RepoProjectMv
                 makeRestCall(Rx2Apollo.from(apollo.query(query))
                     .flatMap { response ->
                         val list = arrayListOf<RepoProjectsOpenQuery.Node>()
-                        response.data()?.repository()?.let { repository ->
+                        response.data?.repository()?.let { repository ->
                             repository.projects().let { projects1 ->
                                 lastPage = if (projects1.pageInfo().hasNextPage()) Int.MAX_VALUE else 0
                                 pages.clear()
@@ -151,7 +151,7 @@ class RepoProjectPresenter : BasePresenter<RepoProjectMvp.View>(), RepoProjectMv
                 makeRestCall(Rx2Apollo.from(apollo.query(query))
                     .flatMap {
                         val list = arrayListOf<RepoProjectsOpenQuery.Node>()
-                        it.data()?.organization()?.let {
+                        it.data?.organization()?.let {
                             it.projects().let {
                                 lastPage = if (it.pageInfo().hasNextPage()) Int.MAX_VALUE else 0
                                 pages.clear()
@@ -189,7 +189,7 @@ class RepoProjectPresenter : BasePresenter<RepoProjectMvp.View>(), RepoProjectMv
                 makeRestCall(Rx2Apollo.from(apollo.query(query))
                     .flatMap {
                         val list = arrayListOf<RepoProjectsOpenQuery.Node>()
-                        it.data()?.organization()?.let {
+                        it.data?.organization()?.let {
                             it.projects().let {
                                 lastPage = if (it.pageInfo().hasNextPage()) Int.MAX_VALUE else 0
                                 pages.clear()

@@ -91,7 +91,7 @@ public class RestProvider {
         return new Retrofit.Builder()
                 .baseUrl(enterprise && PrefGetter.isEnterprise() ? LinkParserHelper.getEndpoint(PrefGetter.getEnterpriseUrl()) : BuildConfig.REST_URL)
                 .client(provideOkHttpClient())
-                .addConverterFactory(new GithubResponseConverter(gson))
+                .addConverterFactory(new GithubResponseConverter())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
     }
@@ -191,7 +191,7 @@ public class RestProvider {
     @NonNull public static UserRestService getContribution() {
         return new Retrofit.Builder()
                 .baseUrl(BuildConfig.REST_URL)
-                .addConverterFactory(new GithubResponseConverter(gson))
+                .addConverterFactory(new GithubResponseConverter())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
                 .create(UserRestService.class);
@@ -226,7 +226,7 @@ public class RestProvider {
         return new Retrofit.Builder()
                 .baseUrl("https://kctbh9vrtdwd.statuspage.io/")
                 .client(provideOkHttpClient())
-                .addConverterFactory(new GithubResponseConverter(gson))
+                .addConverterFactory(new GithubResponseConverter())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
                 .create(ContentService.class)
