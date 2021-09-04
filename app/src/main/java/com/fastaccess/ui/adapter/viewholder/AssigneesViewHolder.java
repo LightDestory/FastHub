@@ -32,7 +32,7 @@ public class AssigneesViewHolder extends BaseViewHolder<User> {
 
     @Override public void onClick(View v) {
         if (onSelectAssignee != null) {
-            int position = getAdapterPosition();
+            int position = getBindingAdapterPosition();
             onSelectAssignee.onToggleSelection(position, !onSelectAssignee.isAssigneeSelected(position));
         } else {
             super.onClick(v);
@@ -55,7 +55,7 @@ public class AssigneesViewHolder extends BaseViewHolder<User> {
         title.setText(user.getLogin());
         date.setVisibility(View.GONE);
         if (onSelectAssignee != null) {
-            itemView.setBackgroundColor(onSelectAssignee.isAssigneeSelected(getAdapterPosition())
+            itemView.setBackgroundColor(onSelectAssignee.isAssigneeSelected(getBindingAdapterPosition())
                     ? lightGray : ViewHelper.getWindowBackground(itemView.getContext()));
         }
     }

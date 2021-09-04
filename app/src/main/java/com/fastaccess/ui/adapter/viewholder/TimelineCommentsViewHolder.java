@@ -78,7 +78,7 @@ public class TimelineCommentsViewHolder extends BaseViewHolder<TimelineModel> {
     @Override public void onClick(View v) {
         if (v.getId() == R.id.toggle || v.getId() == R.id.toggleHolder) {
             if (onToggleView != null) {
-                int position = getAdapterPosition();
+                int position = getBindingAdapterPosition();
                 onToggleView.onToggle(position, !onToggleView.isCollapsed(position));
                 onToggle(onToggleView.isCollapsed(position), true);
             }
@@ -211,12 +211,12 @@ public class TimelineCommentsViewHolder extends BaseViewHolder<TimelineModel> {
             }
         }
         emojiesList.setVisibility(showEmojies ? View.VISIBLE : View.GONE);
-        if (onToggleView != null) onToggle(onToggleView.isCollapsed(getAdapterPosition()), false);
+        if (onToggleView != null) onToggle(onToggleView.isCollapsed(getBindingAdapterPosition()), false);
     }
 
     private void addReactionCount(View v) {
         if (adapter != null) {
-            TimelineModel timelineModel = (TimelineModel) adapter.getItem(getAdapterPosition());
+            TimelineModel timelineModel = (TimelineModel) adapter.getItem(getBindingAdapterPosition());
             if (timelineModel == null) return;
             Comment comment = timelineModel.getComment();
             if (comment != null) {

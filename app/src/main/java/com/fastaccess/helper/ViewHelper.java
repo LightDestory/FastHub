@@ -6,7 +6,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
+import android.graphics.ColorFilter;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -17,6 +17,8 @@ import android.graphics.drawable.shapes.RoundRectShape;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.graphics.BlendModeColorFilterCompat;
+import androidx.core.graphics.BlendModeCompat;
 import com.google.android.material.tabs.TabLayout;
 import android.text.Layout;
 import android.util.TypedValue;
@@ -105,7 +107,9 @@ public class ViewHelper {
     }
 
     public static void tintDrawable(@NonNull Drawable drawable, @ColorInt int color) {
-        drawable.mutate().setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        final ColorFilter filter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
+                color, BlendModeCompat.SRC_IN);
+        drawable.mutate().setColorFilter(filter);
     }
 
     public static Drawable getDrawableSelector(int normalColor, int pressedColor) {

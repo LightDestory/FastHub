@@ -29,6 +29,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.FragmentManager;
 import butterknife.BindView;
@@ -82,7 +83,7 @@ public class MainActivity extends BaseActivity<MainMvp.View, MainPresenter> impl
         super.onNewIntent(intent);
         if (intent != null && intent.getExtras() != null) {
             boolean recreate = intent.getExtras().getBoolean(BundleConstant.YES_NO_EXTRA);
-            if (recreate) recreate();
+            if (recreate) ActivityCompat.recreate(this);
         }
     }
 

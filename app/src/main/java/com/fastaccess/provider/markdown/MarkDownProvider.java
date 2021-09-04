@@ -1,7 +1,6 @@
 package com.fastaccess.provider.markdown;
 
 import android.net.Uri;
-import android.text.Html;
 import android.view.ViewTreeObserver;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
@@ -9,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.text.HtmlCompat;
 
 import com.annimon.stream.IntStream;
 import com.fastaccess.helper.InputHelper;
@@ -118,11 +118,7 @@ public class MarkDownProvider {
     }
 
     public static String stripHtml(String html) {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            return Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY).toString();
-        } else {
-            return Html.fromHtml(html).toString();
-        }
+        return HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_LEGACY).toString();
     }
 
     public static void addList(@NonNull EditText editText, @NonNull String list) {

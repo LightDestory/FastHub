@@ -6,7 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.widget.TextView;
 
 import com.bumptech.glide.load.resource.gif.GifDrawable;
-import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.fastaccess.R;
 
@@ -15,7 +15,7 @@ import java.lang.ref.WeakReference;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-class GlideDrawableTarget extends SimpleTarget<Drawable> {
+class GlideDrawableTarget extends CustomTarget<Drawable> {
     private final UrlDrawable urlDrawable;
     private final WeakReference<TextView> container;
     private final int width;
@@ -53,5 +53,9 @@ class GlideDrawableTarget extends SimpleTarget<Drawable> {
                 textView.invalidate();
             });
         }
+    }
+
+    @Override
+    public void onLoadCleared(@Nullable Drawable placeholder) {
     }
 }

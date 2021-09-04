@@ -121,8 +121,8 @@ class ProfileOverviewPresenter extends BasePresenter<ProfileOverviewMvp.View> im
         manageDisposable(RxHelper.getObservable(Rx2Apollo.from(apolloCall))
                 .filter(dataResponse -> !dataResponse.hasErrors())
                 .flatMap(dataResponse -> {
-                    if (dataResponse.data() != null && dataResponse.data().user() != null) {
-                        return Observable.fromIterable(dataResponse.data().user().pinnedItems().edges());
+                    if (dataResponse.getData() != null && dataResponse.getData().user() != null) {
+                        return Observable.fromIterable(dataResponse.getData().user().pinnedItems().edges());
                     }
                     return Observable.empty();
                 })

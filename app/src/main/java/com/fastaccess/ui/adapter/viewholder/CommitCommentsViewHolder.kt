@@ -59,7 +59,7 @@ class CommitCommentsViewHolder private constructor(view: View, adapter: BaseRecy
 
     override fun onClick(v: View) {
         if (v.id == R.id.toggle || v.id == R.id.toggleHolder) {
-            val position = adapterPosition
+            val position = bindingAdapterPosition
             onToggleView.onToggle(position.toLong(), !onToggleView.isCollapsed(position.toLong()))
             onToggle(onToggleView.isCollapsed(position.toLong()), true)
         } else {
@@ -98,7 +98,7 @@ class CommitCommentsViewHolder private constructor(view: View, adapter: BaseRecy
         } else {
             date.text = ParseDateFormat.getTimeAgo(t.createdAt)
         }
-        onToggle(onToggleView.isCollapsed(adapterPosition.toLong()), false)
+        onToggle(onToggleView.isCollapsed(bindingAdapterPosition.toLong()), false)
     }
 
     private fun onToggle(expanded: Boolean, animate: Boolean) {

@@ -184,7 +184,7 @@ public class ReviewCommentsViewHolder extends BaseViewHolder<ReviewCommentModel>
 
     private void addReactionCount(View v) {
         if (adapter != null) {
-            ReviewCommentModel comment = (ReviewCommentModel) adapter.getItem(getAdapterPosition());
+            ReviewCommentModel comment = (ReviewCommentModel) adapter.getItem(getBindingAdapterPosition());
             if (comment != null) {
                 boolean isReacted = reactionsCallback == null || reactionsCallback.isPreviouslyReacted(comment.getId(), v.getId());
                 ReactionsModel reactionsModel = comment.getReactions() != null ? comment.getReactions() : new ReactionsModel();
@@ -235,7 +235,7 @@ public class ReviewCommentsViewHolder extends BaseViewHolder<ReviewCommentModel>
 
     private long getId() {
         if (adapter != null) {
-            ReviewCommentModel comment = (ReviewCommentModel) adapter.getItem(getAdapterPosition());
+            ReviewCommentModel comment = (ReviewCommentModel) adapter.getItem(getBindingAdapterPosition());
             return comment.getId();
         }
         return -1;

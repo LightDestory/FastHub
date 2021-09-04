@@ -19,7 +19,7 @@ import okhttp3.RequestBody;
 public class EditorLinkImagePresenter extends BasePresenter<EditorLinkImageMvp.View> implements EditorLinkImageMvp.Presenter {
     @Override public void onSubmit(@Nullable String title, @NonNull File file) {
         if (file.exists()) {
-            RequestBody image = RequestBody.create(MediaType.parse("image/*"), file);
+            RequestBody image = RequestBody.create(file, MediaType.parse("image/*"));
             makeRestCall(ImgurProvider.getImgurService().postImage(title, image),
                     imgurReponseModel -> {
                         if (imgurReponseModel.getData() != null) {

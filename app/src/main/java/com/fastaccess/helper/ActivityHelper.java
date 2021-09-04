@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.browser.customtabs.CustomTabColorSchemeParams;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.ActivityOptionsCompat;
@@ -50,8 +51,11 @@ public class ActivityHelper {
     public static void startCustomTab(@NonNull Activity context, @NonNull Uri url) {
         String packageNameToUse = CustomTabsHelper.getPackageNameToUse(context);
         if (packageNameToUse != null) {
-            CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder()
+            final CustomTabColorSchemeParams colorSchemeParams = new CustomTabColorSchemeParams.Builder()
                     .setToolbarColor(ViewHelper.getPrimaryColor(context))
+                    .build();
+            final CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder()
+                    .setDefaultColorSchemeParams(colorSchemeParams)
                     .setShowTitle(true)
                     .build();
             customTabsIntent.intent.setPackage(packageNameToUse);
@@ -162,7 +166,7 @@ public class ActivityHelper {
         Activity activity = getActivity(context);
         if (activity == null) throw new IllegalArgumentException("Context given is not an instance of activity " + context.getClass().getName());
         try {
-            ShareCompat.IntentBuilder.from(activity)
+            new ShareCompat.IntentBuilder(activity)
                     .setChooserTitle(context.getString(R.string.share))
                     .setType("text/plain")
                     .setText(url)

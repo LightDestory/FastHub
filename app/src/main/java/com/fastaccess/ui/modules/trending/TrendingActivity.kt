@@ -9,11 +9,11 @@ import androidx.annotation.ColorInt
 import com.google.android.material.navigation.NavigationView
 import androidx.drawerlayout.widget.DrawerLayout
 import android.text.Editable
-import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import androidx.core.view.GravityCompat
 import butterknife.BindView
 import butterknife.OnClick
 import butterknife.OnEditorAction
@@ -133,7 +133,7 @@ class TrendingActivity : BaseActivity<TrendingMvp.View, TrendingPresenter>(), Tr
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu -> {
-                drawerLayout.openDrawer(Gravity.END)
+                drawerLayout.openDrawer(GravityCompat.END)
                 true
             }
             R.id.share -> {
@@ -174,7 +174,7 @@ class TrendingActivity : BaseActivity<TrendingMvp.View, TrendingPresenter>(), Tr
     }
 
     private fun closeDrawerLayout() {
-        drawerLayout.closeDrawer(Gravity.END)
+        drawerLayout.closeDrawer(GravityCompat.END)
     }
 
     private fun setValues() {

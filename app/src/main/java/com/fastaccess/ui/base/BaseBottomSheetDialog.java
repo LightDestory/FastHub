@@ -79,7 +79,7 @@ import butterknife.Unbinder;
                 if (parent != null) {
                     bottomSheetBehavior = BottomSheetBehavior.from(parent);
                     if (bottomSheetBehavior != null) {
-                        bottomSheetBehavior.setBottomSheetCallback(bottomSheetCallback);
+                        bottomSheetBehavior.addBottomSheetCallback(bottomSheetCallback);
                         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                     }
                 }
@@ -94,6 +94,7 @@ import butterknife.Unbinder;
 
     @Override public void onDestroyView() {
         super.onDestroyView();
+        bottomSheetBehavior.removeBottomSheetCallback(bottomSheetCallback);
         if (unbinder != null) unbinder.unbind();
     }
 

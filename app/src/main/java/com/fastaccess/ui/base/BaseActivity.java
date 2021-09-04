@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.navigation.NavigationView;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.viewpager.widget.ViewPager;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -239,7 +240,7 @@ public abstract class BaseActivity<V extends BaseMvp.FAView, P extends BasePrese
 
     @Override public void onThemeChanged() {
         if (this instanceof MainActivity) {
-            recreate();
+            ActivityCompat.recreate(this);
         } else {
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtras(Bundler.start().put(BundleConstant.YES_NO_EXTRA, true).end());

@@ -39,7 +39,7 @@ public class PaginationInterceptor implements Interceptor {
                     }
                 }
                 json += String.format("\"items\":%s}", response.body().string());
-                return response.newBuilder().body(ResponseBody.create(response.body().contentType(), json)).build();
+                return response.newBuilder().body(ResponseBody.create(json, response.body().contentType())).build();
             } else if (response.header("link") != null) {
                 String link = response.header("link");
                 String pagination = "";
@@ -52,8 +52,14 @@ public class PaginationInterceptor implements Interceptor {
                 }
                 if (!InputHelper.isEmpty(pagination)) {//hacking for search pagination.
                     String body = response.body().string();
-                    return response.newBuilder().body(ResponseBody.create(response.body().contentType(),
-                            "{" + pagination + body.substring(1, body.length()))).build();
+
+                    final ResponseBody responseBody = ResponseBody.create(
+                            "{" + pagination + body.substring(1),
+                            response.body().contentType());
+
+                    return response.newBuilder()
+                            .body(responseBody)
+                            .build();
                 }
             }
         }

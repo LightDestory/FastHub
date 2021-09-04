@@ -21,7 +21,7 @@
 
             <include layout="@layout/appbar_elevation_dark"/>
 
-            <FrameLayout
+            <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

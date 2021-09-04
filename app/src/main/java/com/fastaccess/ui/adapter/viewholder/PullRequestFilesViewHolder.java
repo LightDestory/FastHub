@@ -48,7 +48,7 @@ public class PullRequestFilesViewHolder extends BaseViewHolder<CommitFileChanges
 
     @Override public void onClick(View v) {
         if (v.getId() != R.id.open) {
-            int position = getAdapterPosition();
+            int position = getBindingAdapterPosition();
             onToggleView.onToggle(position, !onToggleView.isCollapsed(position));
             onToggle(onToggleView.isCollapsed(position), true, position);
         } else {
@@ -93,7 +93,7 @@ public class PullRequestFilesViewHolder extends BaseViewHolder<CommitFileChanges
                 .append(statusText)
                 .append("\n")
                 .bold(String.valueOf(commit.getStatus())));
-        int position = getAdapterPosition();
+        int position = getBindingAdapterPosition();
         onToggle(onToggleView.isCollapsed(position), false, position);
     }
 
@@ -131,7 +131,7 @@ public class PullRequestFilesViewHolder extends BaseViewHolder<CommitFileChanges
 
     @Override public void onItemClick(int position, View v, CommitLinesModel item) {
         if (onPatchClickListener != null && adapter != null) {
-            int groupPosition = getAdapterPosition();
+            int groupPosition = getBindingAdapterPosition();
             CommitFileChanges commitFileChanges = (CommitFileChanges) adapter.getItem(groupPosition);
             onPatchClickListener.onPatchClicked(groupPosition, position, v, commitFileChanges.getCommitFileModel(), item);
         }
@@ -139,7 +139,7 @@ public class PullRequestFilesViewHolder extends BaseViewHolder<CommitFileChanges
 
     @Override public void onItemLongClick(int position, View v, CommitLinesModel item) {
         if (adapter == null) return;
-        int groupPosition = getAdapterPosition();
+        int groupPosition = getBindingAdapterPosition();
         CommitFileChanges commitFileChanges = (CommitFileChanges) adapter.getItem(groupPosition);
         int lineNo = item.getLeftLineNo() > 0 ? item.getLeftLineNo() : item.getRightLineNo();
         String url = commitFileChanges.getCommitFileModel().getBlobUrl() + "#L" + lineNo;

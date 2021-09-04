@@ -6,11 +6,11 @@ import android.net.Uri
 import android.os.Bundle
 import com.google.android.material.navigation.NavigationView
 import androidx.drawerlayout.widget.DrawerLayout
-import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ProgressBar
+import androidx.core.view.GravityCompat
 import butterknife.BindView
 import com.evernote.android.state.State
 import com.fastaccess.R
@@ -96,7 +96,7 @@ class WikiActivity : BaseActivity<WikiMvp.View, WikiPresenter>(), WikiMvp.View {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item?.itemId) {
             R.id.menu -> {
-                drawerLayout.openDrawer(Gravity.END)
+                drawerLayout.openDrawer(GravityCompat.END)
                 return true
             }
             R.id.share -> {
@@ -159,7 +159,7 @@ class WikiActivity : BaseActivity<WikiMvp.View, WikiPresenter>(), WikiMvp.View {
     }
 
     private fun closeDrawerLayout() {
-        drawerLayout.closeDrawer(Gravity.END)
+        drawerLayout.closeDrawer(GravityCompat.END)
     }
 
     private fun loadMenu() {

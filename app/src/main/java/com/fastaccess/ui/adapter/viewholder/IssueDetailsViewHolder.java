@@ -140,13 +140,13 @@ public class IssueDetailsViewHolder extends BaseViewHolder<TimelineModel> {
         } else if (timelineModel.getPullRequest() != null) {
             bind(timelineModel.getPullRequest());
         }
-        if (onToggleView != null) onToggle(onToggleView.isCollapsed(getAdapterPosition()), false);
+        if (onToggleView != null) onToggle(onToggleView.isCollapsed(getBindingAdapterPosition()), false);
     }
 
     @Override public void onClick(View v) {
         if (v.getId() == R.id.toggle || v.getId() == R.id.toggleHolder) {
             if (onToggleView != null) {
-                int position = getAdapterPosition();
+                int position = getBindingAdapterPosition();
                 onToggleView.onToggle(position, !onToggleView.isCollapsed(position));
                 onToggle(onToggleView.isCollapsed(position), true);
             }
@@ -158,7 +158,7 @@ public class IssueDetailsViewHolder extends BaseViewHolder<TimelineModel> {
 
     private void addReactionCount(View v) {
         if (adapter != null) {
-            TimelineModel timelineModel = (TimelineModel) adapter.getItem(getAdapterPosition());
+            TimelineModel timelineModel = (TimelineModel) adapter.getItem(getBindingAdapterPosition());
             if (timelineModel == null) return;
             ReactionsModel reactionsModel = null;
             PullRequest pullRequest = timelineModel.getPullRequest();

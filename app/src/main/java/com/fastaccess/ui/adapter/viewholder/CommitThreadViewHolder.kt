@@ -37,7 +37,7 @@ class CommitThreadViewHolder private constructor(view: View,
 
     override fun onClick(v: View) {
         if (v.id == R.id.toggle || v.id == R.id.toggleHolder) {
-            val position = adapterPosition
+            val position = bindingAdapterPosition
             onToggleView.onToggle(position.toLong(), !onToggleView.isCollapsed(position.toLong()))
             onToggle(onToggleView.isCollapsed(position.toLong()))
         }
@@ -59,7 +59,7 @@ class CommitThreadViewHolder private constructor(view: View,
                 if (!it.isEmpty()) commitComments.adapter = CommitCommentsAdapter(it, this, onToggleView)
             }
         }
-        onToggle(onToggleView.isCollapsed(adapterPosition.toLong()))
+        onToggle(onToggleView.isCollapsed(bindingAdapterPosition.toLong()))
     }
 
 

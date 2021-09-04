@@ -1,6 +1,7 @@
 package com.fastaccess.data.dao
 
 import android.os.Parcel
+import androidx.core.os.ParcelCompat
 import com.fastaccess.helper.*
 
 /**
@@ -24,18 +25,18 @@ data class EditRepoFileModel(
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
-        parcel.readBooleanCompat()
+        ParcelCompat.readBoolean(parcel)
     )
 
-    override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
-        writeString(login)
-        writeString(repoId)
-        writeString(path)
-        writeString(ref)
-        writeString(sha)
-        writeString(contentUrl)
-        writeString(fileName)
-        writeBooleanCompat(isEdit)
+    override fun writeToParcel(dest: Parcel, flags: Int) {
+        dest.writeString(login)
+        dest.writeString(repoId)
+        dest.writeString(path)
+        dest.writeString(ref)
+        dest.writeString(sha)
+        dest.writeString(contentUrl)
+        dest.writeString(fileName)
+        ParcelCompat.writeBoolean(dest, isEdit)
     }
 
     companion object {

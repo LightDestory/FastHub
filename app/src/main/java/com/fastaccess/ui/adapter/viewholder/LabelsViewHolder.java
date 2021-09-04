@@ -30,7 +30,7 @@ public class LabelsViewHolder extends BaseViewHolder<LabelModel> {
 
     @Override public void onClick(View v) {
         if (onSelectLabel != null) {
-            int position = getAdapterPosition();
+            int position = getBindingAdapterPosition();
             if (adapter != null) {
                 LabelModel labelModel = (LabelModel) adapter.getItem(position);
                 onSelectLabel.onToggleSelection(labelModel, !onSelectLabel.isLabelSelected(labelModel));

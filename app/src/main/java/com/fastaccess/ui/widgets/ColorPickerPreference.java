@@ -2,7 +2,6 @@ package com.fastaccess.ui.widgets;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.PorterDuff;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
 import android.util.AttributeSet;
@@ -73,7 +72,7 @@ public class ColorPickerPreference extends Preference implements ColorPicker.OnC
         super.onBindViewHolder(holder);
         final Button colorButton = (Button) holder.findViewById(R.id.color);
         colorButton.setBackgroundResource(R.drawable.circle_shape);
-        colorButton.getBackground().setColorFilter(getSelectedColor(), PorterDuff.Mode.SRC_IN);
+        ViewHelper.tintDrawable(colorButton.getBackground(), getSelectedColor());
     }
 
     private int getSelectedColor() {

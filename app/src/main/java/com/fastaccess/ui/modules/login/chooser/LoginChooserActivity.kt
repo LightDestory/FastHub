@@ -7,6 +7,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.transition.TransitionManager
 import android.view.View
 import android.widget.RelativeLayout
+import androidx.core.app.ActivityCompat
 import butterknife.BindView
 import butterknife.OnClick
 import com.fastaccess.BuildConfig
@@ -55,7 +56,7 @@ class LoginChooserActivity : BaseActivity<LoginChooserMvp.View, LoginChooserPres
             val language = PrefGetter.getAppLanguage()
             PrefGetter.setAppLangauge(Locale.getDefault().language)
             if (!BuildConfig.DEBUG) language_selector.visibility = View.GONE
-            if (Locale.getDefault().language != language) recreate()
+            if (Locale.getDefault().language != language) ActivityCompat.recreate(this)
         }
     }
 
@@ -87,7 +88,7 @@ class LoginChooserActivity : BaseActivity<LoginChooserMvp.View, LoginChooserPres
     override fun onLanguageChanged(action: Action) {
         try {
             action.run()
-            recreate()
+            ActivityCompat.recreate(this)
         } catch (e: Exception) {
             e.printStackTrace()
         }

@@ -1,8 +1,9 @@
 package com.fastaccess.provider.theme
 
 import android.app.Activity
-import android.app.ActivityManager
+import android.app.ActivityManager.TaskDescription
 import android.graphics.BitmapFactory
+import android.os.Build
 import androidx.annotation.StyleRes
 import com.danielstone.materialaboutlibrary.MaterialAboutActivity
 import com.fastaccess.R
@@ -259,9 +260,17 @@ object ThemeEngine {
         return R.style.DialogThemeLight
     }
 
+    @Suppress("DEPRECATION")
     private fun setTaskDescription(activity: Activity) {
-        activity.setTaskDescription(ActivityManager.TaskDescription(activity.getString(R.string.app_name),
-                BitmapFactory.decodeResource(activity.resources, R.mipmap.ic_launcher), ViewHelper.getPrimaryColor(activity)))
+        val title = activity.getString(R.string.app_name)
+        val icon = R.mipmap.ic_launcher
+        val color = ViewHelper.getPrimaryColor(activity)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            activity.setTaskDescription(TaskDescription(title, icon, color))
+        } else {
+            val bitmap = BitmapFactory.decodeResource(activity.resources, icon)
+            activity.setTaskDescription(TaskDescription(title, bitmap, color))
+        }
     }
 
     private fun hasTheme(activity: BaseActivity<*, *>) = (activity is LoginChooserActivity || activity is LoginActivity)

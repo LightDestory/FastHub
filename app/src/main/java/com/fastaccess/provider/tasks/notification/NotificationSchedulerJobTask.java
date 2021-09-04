@@ -1,8 +1,6 @@
 
 package com.fastaccess.provider.tasks.notification;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.job.JobInfo;
 import android.app.job.JobParameters;
@@ -13,10 +11,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
-import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationChannelCompat;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
 import com.annimon.stream.Stream;
@@ -252,16 +251,15 @@ public class NotificationSchedulerJobTask extends JobService {
     }
 
     private void showNotification(long id, android.app.Notification notification) {
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        if (notificationManager != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                NotificationChannel notificationChannel = new NotificationChannel(notification.getChannelId(),
-                        notification.getChannelId(), NotificationManager.IMPORTANCE_DEFAULT);
-                notificationChannel.setShowBadge(true);
-                notificationManager.createNotificationChannel(notificationChannel);
-            }
-            notificationManager.notify(InputHelper.getSafeIntId(id), notification);
-        }
+        final NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        final NotificationChannelCompat notificationChannel
+                = new NotificationChannelCompat.Builder(
+                        NotificationCompat.getChannelId(notification), NotificationManagerCompat.IMPORTANCE_DEFAULT)
+                .setName(NotificationCompat.getChannelId(notification))
+                .setShowBadge(true)
+                .build();
+        notificationManager.createNotificationChannel(notificationChannel);
+        notificationManager.notify(InputHelper.getSafeIntId(id), notification);
     }
 
     private PendingIntent getReadOnlyPendingIntent(long id, @NonNull String url) {

@@ -115,13 +115,13 @@ public class GroupedReviewsViewHolder extends BaseViewHolder<TimelineModel> impl
 
     @Override public void onItemClick(int position, View v, ReviewCommentModel item) {
         if (reviewCommentCallback != null) {
-            reviewCommentCallback.onClick(getAdapterPosition(), position, v, item);
+            reviewCommentCallback.onClick(getBindingAdapterPosition(), position, v, item);
         }
     }
 
     @Override public void onItemLongClick(int position, View v, ReviewCommentModel item) {
         if (reviewCommentCallback != null) {
-            reviewCommentCallback.onLongClick(getAdapterPosition(), position, v, item);
+            reviewCommentCallback.onLongClick(getBindingAdapterPosition(), position, v, item);
         }
     }
 
@@ -140,7 +140,7 @@ public class GroupedReviewsViewHolder extends BaseViewHolder<TimelineModel> impl
     }
 
     private long getId() {
-        return getAdapterPosition();
+        return getBindingAdapterPosition();
     }
 
     private void setPatchText(@NonNull String text) {

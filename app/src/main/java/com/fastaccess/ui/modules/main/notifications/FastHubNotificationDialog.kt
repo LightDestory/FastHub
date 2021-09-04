@@ -2,8 +2,8 @@ package com.fastaccess.ui.modules.main.notifications
 
 import android.os.Bundle
 import androidx.fragment.app.FragmentManager
-import android.text.Html
 import android.view.View
+import androidx.core.text.HtmlCompat
 import butterknife.OnClick
 import com.fastaccess.R
 import com.fastaccess.data.dao.model.AbstractFastHubNotification.NotificationType
@@ -35,7 +35,7 @@ class FastHubNotificationDialog : BaseDialogFragment<BaseMvp.FAView, BasePresent
     override fun onFragmentCreated(view: View, savedInstanceState: Bundle?) {
         model?.let {
             title?.text = it.title
-            description?.text = Html.fromHtml(it.body)
+            description?.text = HtmlCompat.fromHtml(it.body, HtmlCompat.FROM_HTML_MODE_LEGACY)
             it.isRead = true
             FastHubNotification.update(it)
         } ?: dismiss()

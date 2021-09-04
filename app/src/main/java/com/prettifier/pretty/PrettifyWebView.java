@@ -4,9 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.net.Uri;
-import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.webkit.WebViewClientCompat;
+
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,7 +15,6 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 import com.fastaccess.R;
 import com.fastaccess.helper.AppHelper;
@@ -79,11 +79,7 @@ public class PrettifyWebView extends NestedWebView {
             }
         }
         setWebChromeClient(new ChromeClient());
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            setWebViewClient(new WebClient());
-        } else {
-            setWebViewClient(new WebClientCompat());
-        }
+        setWebViewClient(new WebClientCompat());
         WebSettings settings = getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setAppCachePath(getContext().getCacheDir().getPath());
@@ -203,7 +199,6 @@ public class PrettifyWebView extends NestedWebView {
 
     public void loadImage(@NonNull String url, boolean isSvg) {
         WebSettings settings = getSettings();
-        settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         settings.setSupportZoom(true);
         settings.setBuiltInZoomControls(true);
@@ -252,16 +247,10 @@ public class PrettifyWebView extends NestedWebView {
         }
     }
 
-    private class WebClient extends WebViewClient {
-        @Override public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-            startActivity(request.getUrl());
-            return true;
-        }
-    }
-
-    private class WebClientCompat extends WebViewClient {
-        @SuppressWarnings("deprecation") @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            startActivity(Uri.parse(url));
+    private class WebClientCompat extends WebViewClientCompat {
+        @Override public boolean shouldOverrideUrlLoading(@NonNull WebView view,
+                                                          @NonNull WebResourceRequest request) {
+            startActivity(Uri.parse(request.getUrl().toString()));
             return true;
         }
 
