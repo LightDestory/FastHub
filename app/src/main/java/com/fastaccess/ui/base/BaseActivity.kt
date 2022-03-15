@@ -146,7 +146,7 @@ abstract class BaseActivity<V : FAView, P : BasePresenter<V>> : TiActivity<P, V>
             if (now - old >= 600) {
                 // 10m check
                 presenter!!.onCheckGitHubStatus()
-                PrefHelper.set("github_status_check", now)
+                PrefHelper.putAny("github_status_check", now)
             }
             if (intent != null) {
                 schemeUrl = intent.getStringExtra(BundleConstant.SCHEME_URL)
