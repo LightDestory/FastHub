@@ -2,7 +2,6 @@ package com.fastaccess.ui.modules.main;
 
 import static com.fastaccess.helper.AppHelper.getFragmentByTag;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -33,7 +32,6 @@ import com.fastaccess.ui.modules.feeds.FeedsFragment;
 import com.fastaccess.ui.modules.main.issues.pager.MyIssuesPagerFragment;
 import com.fastaccess.ui.modules.main.pullrequests.pager.MyPullsPagerFragment;
 import com.fastaccess.ui.modules.notification.NotificationActivity;
-import com.fastaccess.ui.modules.pinned.PinnedReposActivity;
 import com.fastaccess.ui.modules.search.SearchActivity;
 import com.fastaccess.ui.modules.settings.SlackBottomSheetDialog;
 import com.fastaccess.ui.modules.user.UserPagerActivity;

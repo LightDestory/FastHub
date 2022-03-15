@@ -21,8 +21,6 @@ import android.view.inputmethod.InputMethodManager;
 import com.fastaccess.App;
 import com.fastaccess.BuildConfig;
 import com.fastaccess.R;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 
 import java.util.Locale;
 
@@ -172,14 +170,13 @@ public class AppHelper {
     }
 
     public static boolean isGoogleAvailable(@NonNull Context context) {
-        ApplicationInfo applicationInfo = null;
-        try {
-            applicationInfo = context.getPackageManager().getApplicationInfo("com.google.android.gms", 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        return applicationInfo != null && applicationInfo.enabled &&
-                GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS;
+        // ApplicationInfo applicationInfo = null;
+        // try {
+        //     applicationInfo = context.getPackageManager().getApplicationInfo("com.google.android.gms", 0);
+        // } catch (PackageManager.NameNotFoundException e) {
+        //     e.printStackTrace();
+        // }
+        return true;
     }
 
     public static boolean isDeviceAnimationEnabled(@NonNull Context context) {

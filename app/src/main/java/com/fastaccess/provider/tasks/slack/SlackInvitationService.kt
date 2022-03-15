@@ -1,5 +1,6 @@
 package com.fastaccess.provider.tasks.slack
 
+import android.app.IntentService
 import android.content.Intent
 import com.fastaccess.App
 import com.fastaccess.R
@@ -8,14 +9,13 @@ import com.fastaccess.data.dao.SlackResponseModel
 import com.fastaccess.data.dao.model.Login
 import com.fastaccess.helper.RxHelper
 import com.fastaccess.provider.rest.RestProvider
-import com.google.firebase.messaging.EnhancedIntentService
 import es.dmoral.toasty.Toasty
 
 /**
  * Created by Kosh on 01 May 2017, 1:09 AM
  */
-class SlackInvitationService : EnhancedIntentService() {
-    fun onHandleIntent(intent: Intent?) {
+class SlackInvitationService(name: String?) : IntentService(name) {
+    override fun onHandleIntent(intent: Intent?) {
         val login = Login.getUser()
         if (login != null) {
             val body = SlackInvitePostModel()
@@ -46,7 +46,7 @@ class SlackInvitationService : EnhancedIntentService() {
         }
     }
 
-    override fun handleIntent(p0: Intent) {
+    fun handleIntent(p0: Intent) {
         onHandleIntent(p0)
     }
 }

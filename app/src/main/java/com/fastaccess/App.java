@@ -13,10 +13,8 @@ import com.fastaccess.helper.PrefHelper;
 import com.fastaccess.helper.TypeFaceHelper;
 import com.fastaccess.provider.colors.ColorsProvider;
 import com.fastaccess.provider.emoji.EmojiManager;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.miguelbcr.io.rx_billing_service.RxBillingService;
+import com.fastaccess.provider.tasks.notification.NotificationSchedulerJobTask;
 import com.tencent.bugly.crashreport.CrashReport;
-
 import es.dmoral.toasty.Toasty;
 import io.requery.Persistable;
 import io.requery.android.sqlite.DatabaseSource;
@@ -26,7 +24,6 @@ import io.requery.reactivex.ReactiveSupport;
 import io.requery.sql.Configuration;
 import io.requery.sql.EntityDataStore;
 import io.requery.sql.TableCreationMode;
-import shortbread.ShortbreadInitializer;
 
 
 /**
@@ -57,12 +54,11 @@ public class App extends Application {
     }
 
     private void init() {
-        RxBillingService.register(this);
         deleteDatabase("database.db");
         getDataStore();
         setupPreference();
         TypeFaceHelper.generateTypeface(this);
-//        NotificationSchedulerJobTask.scheduleJob(this);
+        NotificationSchedulerJobTask.scheduleJob(this);
         if (BuildConfig.DEBUG) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
                 initShortcut();
@@ -72,10 +68,6 @@ public class App extends Application {
         EmojiManager.load();
         ColorsProvider.load();
         DeviceNameGetter.instance.loadDevice();
-        try {
-            FirebaseMessaging.getInstance().subscribeToTopic("FastHub");
-        } catch (Exception ignored) {
-        }
         Toasty.Config.getInstance().allowQueue(true).apply();
 //        ThemeEngine.applyApplication(this);
     }

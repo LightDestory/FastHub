@@ -1,5 +1,6 @@
 package com.fastaccess.provider.tasks.git
 
+import android.app.IntentService
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
@@ -11,12 +12,11 @@ import com.fastaccess.helper.Bundler
 import com.fastaccess.provider.rest.RestProvider
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import com.google.firebase.messaging.EnhancedIntentService
 
 /**
  * Created by Kosh on 12 Mar 2017, 2:25 PM
  */
-class GithubActionService : EnhancedIntentService() {
+class GithubActionService(name: String?) : IntentService(name) {
     private var notification: NotificationCompat.Builder? = null
     private var notificationManager: NotificationManager? = null
         get() {
@@ -44,7 +44,7 @@ class GithubActionService : EnhancedIntentService() {
     @kotlin.annotation.Retention(AnnotationRetention.SOURCE)
     internal annotation class GitActionType
 
-    fun onHandleIntent(intent: Intent?) {
+    override fun onHandleIntent(intent: Intent?) {
         if (intent != null && intent.extras != null) {
             val bundle = intent.extras
             @GitActionType val type = bundle!!.getInt(BundleConstant.EXTRA_TYPE)
@@ -240,7 +240,7 @@ class GithubActionService : EnhancedIntentService() {
         }
     }
 
-    override fun handleIntent(p0: Intent) {
+    fun handleIntent(p0: Intent) {
         onHandleIntent(p0)
     }
 }
