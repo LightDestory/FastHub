@@ -338,6 +338,8 @@
     <string name="restore">Restore</string>
     <string name="backup">Backup</string>
     <string name="backed_up">Successfully backed up!</string>
+    <string name="backed_failed">failed backed up!</string>
+    <string name="restore_up">Successfully restore up!</string>
     <string name="select_backup">Select Backup to Restore</string>
     <string name="permission_failed">Permission Not Granted.</string>
     <string name="backup_summary">Last update: %s</string>

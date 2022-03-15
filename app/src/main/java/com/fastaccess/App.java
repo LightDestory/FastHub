@@ -10,6 +10,7 @@ import androidx.annotation.RequiresApi;
 import com.fastaccess.data.dao.model.Models;
 import com.fastaccess.helper.DeviceNameGetter;
 import com.fastaccess.helper.PrefHelper;
+import com.fastaccess.helper.SettingsDataStore;
 import com.fastaccess.helper.TypeFaceHelper;
 import com.fastaccess.provider.colors.ColorsProvider;
 import com.fastaccess.provider.emoji.EmojiManager;
@@ -67,11 +68,11 @@ public class App extends Application {
         ColorsProvider.load();
         DeviceNameGetter.instance.loadDevice();
         Toasty.Config.getInstance().allowQueue(true).apply();
-//        ThemeEngine.applyApplication(this);
     }
 
     private void setupPreference() {
         PrefHelper.init(this.getApplicationContext());
+        SettingsDataStore.init();
     }
 
     public ReactiveEntityStore<Persistable> getDataStore() {

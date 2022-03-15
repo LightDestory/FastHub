@@ -243,6 +243,7 @@ CaptainTF @ Github 提议：
     <string name="back_button_title">返回键直接退出</string>
     <string name="restore">恢复</string>
     <string name="backup">备份</string>
+    <string name="restore_up">恢复成功!</string>
     <string name="backed_up">备份成功!</string>
     <string name="select_backup">选择要还原的备份</string>
     <string name="permission_failed">没有权限.</string>
