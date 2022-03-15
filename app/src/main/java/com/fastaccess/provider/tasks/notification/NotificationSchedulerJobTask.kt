@@ -4,6 +4,11 @@ import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.job.JobInfo
+import android.app.job.JobParameters
+import android.app.job.JobScheduler
+import android.app.job.JobService
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -25,16 +30,17 @@ import com.fastaccess.helper.PrefGetter
 import com.fastaccess.provider.markdown.MarkDownProvider
 import com.fastaccess.provider.rest.RestProvider
 import com.fastaccess.ui.modules.notification.NotificationActivity
-import com.firebase.jobdispatcher.*
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
+
 
 /**
  * Created by Kosh on 19 Feb 2017, 6:32 PM
  */
 class NotificationSchedulerJobTask : JobService() {
     override fun onStartJob(job: JobParameters): Boolean {
-        if (!SINGLE_JOB_ID.equals(job.tag, ignoreCase = true)) {
+        if (!(SINGLE_JOB_ID == job.jobId)) {
             if (PrefGetter.notificationTaskDuration == -1) {
                 scheduleJob(this, -1, false)
                 finishJob(job)
@@ -341,8 +347,8 @@ class NotificationSchedulerJobTask : JobService() {
     }
 
     companion object {
-        private const val JOB_ID = "fasthub_notification"
-        private const val SINGLE_JOB_ID = "single_fasthub_notification"
+        private const val JOB_ID = 1
+        private const val SINGLE_JOB_ID = 2
         private const val THIRTY_MINUTES = 30 * 60
         private const val NOTIFICATION_GROUP_ID = "FastHub"
         @JvmStatic
@@ -353,43 +359,29 @@ class NotificationSchedulerJobTask : JobService() {
 
         @JvmStatic
         fun scheduleJob(context: Context, duration: Int, cancel: Boolean) {
-            var duration1 = duration
-            if (AppHelper.isGoogleAvailable(context)) {
-                val dispatcher = FirebaseJobDispatcher(GooglePlayDriver(context))
-                dispatcher.cancel(SINGLE_JOB_ID)
-                if (cancel) dispatcher.cancel(JOB_ID)
-                if (duration1 == -1) {
-                    dispatcher.cancel(JOB_ID)
-                    return
-                }
-                duration1 = if (duration1 <= 0) THIRTY_MINUTES else duration1
-                val builder = dispatcher
-                    .newJobBuilder()
-                    .setTag(JOB_ID)
-                    .setRetryStrategy(RetryStrategy.DEFAULT_LINEAR)
-                    .setLifetime(Lifetime.FOREVER)
-                    .setRecurring(true)
-                    .setConstraints(Constraint.ON_ANY_NETWORK)
-                    .setTrigger(Trigger.executionWindow(duration1 / 2, duration1))
-                    .setService(NotificationSchedulerJobTask::class.java)
-                dispatcher.mustSchedule(builder.build())
+            val jobScheduler = context.getSystemService(JOB_SCHEDULER_SERVICE) as JobScheduler
+            jobScheduler.cancel(SINGLE_JOB_ID)
+            if (cancel) jobScheduler.cancel(JOB_ID)
+            if (duration == -1) {
+                jobScheduler.cancel(JOB_ID)
+                return
             }
-        }
+            val duration1 = if (duration <= 0) THIRTY_MINUTES else duration
+            val builder = JobInfo.Builder(
+                JOB_ID, ComponentName(
+                    context.packageName,
+                    NotificationSchedulerJobTask::class.java.name
+                )
+            )
+                .setBackoffCriteria(
+                    JobInfo.DEFAULT_INITIAL_BACKOFF_MILLIS,
+                    JobInfo.BACKOFF_POLICY_LINEAR
+                )
+                .setPersisted(true)
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                .setPeriodic(TimeUnit.SECONDS.toMillis(duration1.toLong()))
 
-        @JvmStatic
-        fun scheduleOneTimeJob(context: Context) {
-            if (AppHelper.isGoogleAvailable(context)) {
-                val dispatcher = FirebaseJobDispatcher(GooglePlayDriver(context))
-                val builder = dispatcher
-                    .newJobBuilder()
-                    .setTag(SINGLE_JOB_ID)
-                    .setReplaceCurrent(true)
-                    .setRecurring(false)
-                    .setTrigger(Trigger.executionWindow(30, 60))
-                    .setConstraints(Constraint.ON_ANY_NETWORK)
-                    .setService(NotificationSchedulerJobTask::class.java)
-                dispatcher.mustSchedule(builder.build())
-            }
+            jobScheduler.schedule(builder.build())
         }
     }
 }
