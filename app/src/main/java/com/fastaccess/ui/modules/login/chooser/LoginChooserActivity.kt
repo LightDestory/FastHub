@@ -55,9 +55,6 @@ class LoginChooserActivity : BaseActivity<LoginChooserMvp.View, LoginChooserPres
         multiAccLayout = root.findViewById(R.id.multiAccLayout)
         viewGroup = root.findViewById(R.id.viewGroup)
         toggleImage = root.findViewById(R.id.toggleImage)
-        root.findViewById<View>(R.id.basicAuth).setOnThrottleClickListener {
-            this.onBasicAuthClicked()
-        }
         root.findViewById<View>(R.id.accessToken).setOnThrottleClickListener {
             this.onAccessTokenClicked()
         }
@@ -82,10 +79,6 @@ class LoginChooserActivity : BaseActivity<LoginChooserMvp.View, LoginChooserPres
             if (!BuildConfig.DEBUG) languageSelector.visibility = View.GONE
             if (Locale.getDefault().language != language) recreate()
         }
-    }
-
-    private fun onBasicAuthClicked() {
-        LoginActivity.start(this, true)
     }
 
     internal fun onAccessTokenClicked() {

@@ -251,7 +251,7 @@ open class LoginActivity : BaseActivity<LoginMvp.View, LoginPresenter>(), LoginM
             val intent = Intent(activity, LoginActivity::class.java)
             intent.putExtras(
                 Bundler.start()
-                    .put(BundleConstant.YES_NO_EXTRA, true)
+                    .put(BundleConstant.YES_NO_EXTRA, false)
                     .put(BundleConstant.EXTRA_TWO, true)
                     .end()
             )
