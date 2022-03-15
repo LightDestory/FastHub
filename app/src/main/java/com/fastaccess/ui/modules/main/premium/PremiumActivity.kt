@@ -23,7 +23,7 @@ class PremiumActivity : BaseActivity<PremiumMvp.View, BasePresenter<PremiumMvp.V
 
     override val isTransparent: Boolean = true
 
-    override fun providePresenter(): BasePresenter<PremiumMvp.View> = BasePresenter<PremiumMvp.View>()
+    override fun providePresenter(): BasePresenter<PremiumMvp.View> = BasePresenter()
 
     override fun canBack(): Boolean = true
 
@@ -34,7 +34,7 @@ class PremiumActivity : BaseActivity<PremiumMvp.View, BasePresenter<PremiumMvp.V
         AnimHelper.animateVisibility(cardsHolder, true)
     }
 
-    @OnClick(R.id.buyAll) fun onBuyAll() {
+    @OnClick(R.id.two) fun onBuyAll() {
         PrefGetter.setProItems()
         PrefGetter.setEnterpriseItem()
         showMessage(getString(R.string.success), "\"Pro\" features unlocked, but don't forget to support development!")
@@ -44,7 +44,6 @@ class PremiumActivity : BaseActivity<PremiumMvp.View, BasePresenter<PremiumMvp.V
     @OnClick(R.id.five) fun onShowUpstreamSupport() {
         startActivity(RepoPagerActivity.createIntent(this, "FastHub", "k0shk0sh"))
     }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {

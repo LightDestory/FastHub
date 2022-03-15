@@ -12,7 +12,7 @@ import com.fastaccess.provider.rest.RestProvider
 /**
  * Created by Kosh on 09 Jun 2017, 9:02 PM
  */
-class CheckVersionService(name: String?) : IntentService(name) {
+class CheckVersionService : IntentService("CheckVersionService") {
     fun handleIntent(p0: Intent) {
         onHandleIntent(p0)
     }
