@@ -15,7 +15,7 @@ import com.google.firebase.messaging.EnhancedIntentService
 class CheckVersionService : EnhancedIntentService() {
     override fun handleIntent(p0: Intent) {
         val d = RxHelper.getObservable(RestProvider.getRepoService(false)
-                .getLatestRelease("k0shk0sh", "FastHub"))
+                .getLatestRelease("LightDestory", "FastHub-RE"))
                 .subscribe({ t ->
                     t?.let {
                         Toast.makeText(App.getInstance(), if (BuildConfig.VERSION_NAME.contains(it.tagName))
