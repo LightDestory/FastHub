@@ -89,6 +89,14 @@
 
                     <include layout="@layout/profile_follow_action_layout"/>
 
+                    <com.prettifier.pretty.PrettifyWebView
+                        android:id="@+id/readmeWebView"
+                        android:layout_width="match_parent"
+                        android:layout_marginBottom="8dp"
+                        android:layout_height="wrap_content"
+                        app:webview_background="?android:windowBackground"
+                        android:visibility="gone"
+                        tools:visibility="visible"/>
 
                     <LinearLayout
                         android:id="@+id/section_container"
