@@ -36,6 +36,7 @@ import com.fastaccess.data.dao.model.Login
 import com.fastaccess.data.dao.model.User
 import com.fastaccess.github.GetPinnedReposQuery
 import com.fastaccess.helper.*
+import com.prettifier.pretty.PrettifyWebView
 
 /**
  * Created by Kosh on 03 Dec 2016, 9:16 AM
@@ -91,6 +92,8 @@ class ProfileOverviewFragment : BaseFragment<ProfileOverviewMvp.View, ProfileOve
 
     var pinnedReposCard: CardView? = null
 
+    var readmeWebView: PrettifyWebView? = null
+
     @State
     var userModel: User? = null
     private var profileCallback: ProfilePagerMvp.View? = null
@@ -124,6 +127,7 @@ class ProfileOverviewFragment : BaseFragment<ProfileOverviewMvp.View, ProfileOve
         this.pinnedReposTextView = view.findViewById(R.id.pinnedReposTextView)
         this.pinnedList = view.findViewById(R.id.pinnedList)
         this.pinnedReposCard = view.findViewById(R.id.pinnedReposCard)
+        this.readmeWebView = view.findViewById(R.id.readmeWebView)
         return view
     }
 
@@ -352,6 +356,13 @@ class ProfileOverviewFragment : BaseFragment<ProfileOverviewMvp.View, ProfileOve
             pinnedReposTextView!!.visibility = View.GONE
             pinnedReposCard!!.visibility = View.GONE
         }
+    }
+
+    override fun onSetMdText(text: String, baseUrl: String, replace: Boolean) {
+        hideProgress()
+        readmeWebView!!.visibility = View.VISIBLE
+        readmeWebView!!.setGithubContentWithReplace(text, baseUrl, replace);
+        requireActivity().invalidateOptionsMenu();
     }
 
     override fun showProgress(@StringRes resId: Int) {
