@@ -6,6 +6,7 @@ plugins {
     id("com.apollographql.apollo3").version("3.1.0")
     id("com.mikepenz.aboutlibraries.plugin").version("10.0.0-rc02")
 }
+
 android {
     compileSdk = 31
     defaultConfig {
@@ -207,9 +208,6 @@ dependencies {
     // shortbread
     implementation("com.github.matthiasrobbers:shortbread:1.4.0")
 //    kapt("com.github.matthiasrobbers:shortbread-compiler:1.4.0")
-
-    // bugly
-    implementation("com.tencent.bugly:crashreport:4.0.0")
 
 
     testImplementation("junit:junit:4.13.2")

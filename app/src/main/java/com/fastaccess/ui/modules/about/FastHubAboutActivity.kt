@@ -173,7 +173,7 @@ class FastHubAboutActivity : MaterialAboutActivity() {
     }
 
     private fun buildAuthor(context: Context, authorCardBuilder: MaterialAboutCard.Builder) {
-        authorCardBuilder.title("[Upstream] " + R.string.author)
+        authorCardBuilder.title("[Upstream] ${getString(R.string.author)}")
         authorCardBuilder.addItem(MaterialAboutActionItem.Builder()
             .text("Kosh Sergani")
             .subText("k0shk0sh")
@@ -206,7 +206,7 @@ class FastHubAboutActivity : MaterialAboutActivity() {
     }
 
     private fun buildMisc(context: Context, miscCardBuilder: MaterialAboutCard.Builder) {
-        miscCardBuilder.title("[Upstream] " + R.string.about)
+    miscCardBuilder.title("[Upstream] ${getString(R.string.about)}")
             .addItem(MaterialAboutActionItem.Builder()
                 .text(R.string.changelog)
                 .icon(ContextCompat.getDrawable(context, R.drawable.ic_track_changes))

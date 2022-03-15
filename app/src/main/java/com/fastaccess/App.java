@@ -14,7 +14,6 @@ import com.fastaccess.helper.TypeFaceHelper;
 import com.fastaccess.provider.colors.ColorsProvider;
 import com.fastaccess.provider.emoji.EmojiManager;
 import com.fastaccess.provider.tasks.notification.NotificationSchedulerJobTask;
-import com.tencent.bugly.crashreport.CrashReport;
 import es.dmoral.toasty.Toasty;
 import io.requery.Persistable;
 import io.requery.android.sqlite.DatabaseSource;
@@ -37,7 +36,6 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        CrashReport.initCrashReport(getApplicationContext(), "ae44f59ed7", BuildConfig.DEBUG);
         instance = this;
         init();
     }

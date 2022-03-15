@@ -16,7 +16,7 @@ import io.reactivex.schedulers.Schedulers
 /**
  * Created by Kosh on 12 Mar 2017, 2:25 PM
  */
-class GithubActionService(name: String?) : IntentService(name) {
+class GithubActionService() : IntentService("GithubActionService") {
     private var notification: NotificationCompat.Builder? = null
     private var notificationManager: NotificationManager? = null
         get() {
