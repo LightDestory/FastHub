@@ -87,7 +87,15 @@ class FastHubAboutActivity : MaterialAboutActivity() {
                 .setOnClickAction {
                     startActivity(RepoPagerActivity.createIntent(this, "FastHub-RE", "LightDestory"))
                 }
-        .build())
+                .build())
+            .addItem(MaterialAboutActionItem.Builder()
+                .text("Unlock all features")
+                .subText("but don't forget to support developers!")
+                .icon(ContextCompat.getDrawable(context, R.drawable.ic_lock))
+                .setOnClickAction {
+                    startActivity(Intent(context, DonationActivity::class.java))
+                }
+                .build())
     }
 
     private fun buildLogo(

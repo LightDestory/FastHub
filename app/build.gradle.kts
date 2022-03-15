@@ -12,8 +12,8 @@ android {
         applicationId = "com.fastaccess.github.revival"
         minSdk = 21
         targetSdk = 31
-        versionCode = 468
-        versionName = "4.6.8"
+        versionCode = 473
+        versionName = "4.7.3"
         buildConfigField("String", "GITHUB_APP_ID", "\"com.fastaccess.github.revival.debug\"")
         buildConfigField("String", "GITHUB_CLIENT_ID", "\"473e333123519beadd63\"")
         buildConfigField("String", "GITHUB_SECRET", "\"b2d158f949d3615078eaf570ff99eba81cfa1ff9\"")
@@ -169,16 +169,6 @@ dependencies {
     implementation("com.atlassian.commonmark:commonmark-ext-gfm-tables:0.17.0")
     implementation("com.atlassian.commonmark:commonmark-ext-ins:0.17.0")
     implementation("com.atlassian.commonmark:commonmark-ext-yaml-front-matter:0.17.0")
-
-    // firebase
-    implementation("com.google.firebase:firebase-core:20.1.0")
-    implementation("com.google.firebase:firebase-messaging:23.0.0")
-    implementation("com.google.firebase:firebase-database:20.0.3")
-//    implementation("com.firebase:firebase-jobdispatcher:0.8.6")
-//    implementation("com.google.android.gms:play-services-base:18.0.1")
-
-    // rx billing
-    implementation("com.github.miguelbcr:RxBillingService:0.0.3")
 
     // kotlin std
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10")

@@ -3,7 +3,6 @@ package com.fastaccess.ui.modules.login
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import androidx.annotation.StringRes
@@ -14,16 +13,12 @@ import com.fastaccess.R
 import com.fastaccess.helper.*
 import com.fastaccess.ui.base.BaseActivity
 import com.fastaccess.ui.modules.login.chooser.LoginChooserActivity
-import com.fastaccess.ui.modules.main.donation.DonateActivity.Companion.enableProduct
 import com.fastaccess.ui.widgets.FontCheckbox
 import com.fastaccess.ui.widgets.dialog.MessageDialogView
 import com.fastaccess.utils.setOnThrottleClickListener
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.miguelbcr.io.rx_billing_service.RxBillingService
-import com.miguelbcr.io.rx_billing_service.entities.ProductType
-import com.miguelbcr.io.rx_billing_service.entities.Purchase
 import es.dmoral.toasty.Toasty
 import io.reactivex.functions.Action
 
@@ -192,10 +187,8 @@ open class LoginActivity : BaseActivity<LoginMvp.View, LoginPresenter>(), LoginM
     }
 
     override fun onSuccessfullyLoggedIn(extraLogin: Boolean) {
-        checkPurchases {
-            hideProgress()
-            onRestartApp()
-        }
+        hideProgress()
+        onRestartApp()
     }
 
 
@@ -240,29 +233,6 @@ open class LoginActivity : BaseActivity<LoginMvp.View, LoginPresenter>(), LoginM
     override fun hideProgress() {
         progress!!.visibility = View.GONE
         login!!.show()
-    }
-
-    protected fun checkPurchases(action: Action?) {
-        presenter!!.manageViewDisposable(RxBillingService.getInstance(this, BuildConfig.DEBUG)
-            .getPurchases(ProductType.IN_APP)
-            .doOnSubscribe { showProgress(0) }
-            .subscribe { purchases: List<Purchase>?, throwable: Throwable? ->
-                hideProgress()
-                if (throwable == null) {
-                    Logger.e(purchases)
-                    if (purchases != null && purchases.isNotEmpty()) {
-                        for (purchase in purchases) {
-                            val sku = purchase.sku()
-                            if (!InputHelper.isEmpty(sku)) {
-                                enableProduct(sku, App.getInstance())
-                            }
-                        }
-                    }
-                } else {
-                    throwable.printStackTrace()
-                }
-                action?.run()
-            })
     }
 
     private fun doLogin() {
