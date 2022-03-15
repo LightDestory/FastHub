@@ -9,12 +9,12 @@ plugins {
 android {
     compileSdk = 31
     defaultConfig {
-        applicationId = "com.fastaccess.github"
+        applicationId = "com.fastaccess.github.revival"
         minSdk = 21
         targetSdk = 31
         versionCode = 468
         versionName = "4.6.8"
-        buildConfigField("String", "GITHUB_APP_ID", "\"com.fastaccess.github.debug\"")
+        buildConfigField("String", "GITHUB_APP_ID", "\"com.fastaccess.github.revival.debug\"")
         buildConfigField("String", "GITHUB_CLIENT_ID", "\"473e333123519beadd63\"")
         buildConfigField("String", "GITHUB_SECRET", "\"b2d158f949d3615078eaf570ff99eba81cfa1ff9\"")
         buildConfigField("String", "IMGUR_CLIENT_ID", "\"5fced7f255e1dc9\"")

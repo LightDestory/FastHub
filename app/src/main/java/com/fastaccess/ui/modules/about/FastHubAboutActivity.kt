@@ -4,28 +4,20 @@ import com.fastaccess.provider.theme.ThemeEngine.applyForAbout
 import com.fastaccess.ui.modules.user.UserPagerActivity.Companion.startActivity
 import com.danielstone.materialaboutlibrary.MaterialAboutActivity
 import android.os.Bundle
-import com.fastaccess.provider.theme.ThemeEngine
 import com.fastaccess.R
 import com.danielstone.materialaboutlibrary.model.MaterialAboutList
 import com.danielstone.materialaboutlibrary.model.MaterialAboutCard
 import android.content.Intent
-import android.app.Activity
 import android.content.Context
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import com.fastaccess.helper.BundleConstant
 import es.dmoral.toasty.Toasty
 import com.fastaccess.App
 import android.widget.Toast
-import androidx.compose.runtime.withFrameMillis
-import androidx.compose.ui.Modifier
 import com.danielstone.materialaboutlibrary.items.MaterialAboutActionItem
 import androidx.core.content.ContextCompat
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.danielstone.materialaboutlibrary.items.MaterialAboutItemOnClickAction
 import com.fastaccess.helper.ActivityHelper
-import com.fastaccess.ui.modules.user.UserPagerActivity
 import com.fastaccess.ui.modules.repos.RepoPagerActivity
 import com.danielstone.materialaboutlibrary.ConvenienceBuilder
 import com.fastaccess.BuildConfig
@@ -34,8 +26,6 @@ import com.fastaccess.ui.modules.changelog.ChangelogBottomSheetDialog
 import com.fastaccess.provider.tasks.version.CheckVersionService
 import com.fastaccess.ui.modules.repos.issues.create.CreateIssueActivity
 import com.mikepenz.aboutlibraries.LibsBuilder
-import com.mikepenz.aboutlibraries.ui.LibsActivity
-import com.mikepenz.aboutlibraries.ui.compose.LibrariesContainer
 
 /**
  * Created by danielstone on 12 Mar 2017, 1:57 AM
@@ -51,6 +41,8 @@ class FastHubAboutActivity : MaterialAboutActivity() {
     override fun getMaterialAboutList(context: Context): MaterialAboutList {
         val appCardBuilder = MaterialAboutCard.Builder()
         buildApp(context, appCardBuilder)
+        val revivalCardBuilder = MaterialAboutCard.Builder()
+        buildRevival(context, revivalCardBuilder)
         val miscCardBuilder = MaterialAboutCard.Builder()
         buildMisc(context, miscCardBuilder)
         val authorCardBuilder = MaterialAboutCard.Builder()
@@ -59,7 +51,7 @@ class FastHubAboutActivity : MaterialAboutActivity() {
         val logoAuthor = MaterialAboutCard.Builder()
         buildLogo(context, newLogoAuthor, logoAuthor)
         return MaterialAboutList(
-            appCardBuilder.build(), miscCardBuilder.build(), authorCardBuilder.build(),
+            appCardBuilder.build(), revivalCardBuilder.build(), miscCardBuilder.build(), authorCardBuilder.build(),
             newLogoAuthor.build(), logoAuthor.build()
         )
     }
@@ -84,6 +76,18 @@ class FastHubAboutActivity : MaterialAboutActivity() {
             finish()
         }
         return false //override
+    }
+
+    private fun buildRevival(context: Context, revivalCardBuilder: MaterialAboutCard.Builder) {
+        revivalCardBuilder.title("FastHub-RE")
+            .addItem(MaterialAboutActionItem.Builder()
+                .text("Revival Attempt for FastHub the ultimate GitHub client for Android.")
+                .subText("by the community")
+                .icon(ContextCompat.getDrawable(context, R.drawable.ic_github))
+                .setOnClickAction {
+                    startActivity(RepoPagerActivity.createIntent(this, "FastHub-RE", "LightDestory"))
+                }
+        .build())
     }
 
     private fun buildLogo(
@@ -161,7 +165,7 @@ class FastHubAboutActivity : MaterialAboutActivity() {
     }
 
     private fun buildAuthor(context: Context, authorCardBuilder: MaterialAboutCard.Builder) {
-        authorCardBuilder.title(R.string.author)
+        authorCardBuilder.title("[Upstream] " + R.string.author)
         authorCardBuilder.addItem(MaterialAboutActionItem.Builder()
             .text("Kosh Sergani")
             .subText("k0shk0sh")
@@ -194,19 +198,7 @@ class FastHubAboutActivity : MaterialAboutActivity() {
     }
 
     private fun buildMisc(context: Context, miscCardBuilder: MaterialAboutCard.Builder) {
-        miscCardBuilder.title(R.string.about)
-            .addItem(MaterialAboutActionItem.Builder()
-                .text(R.string.support_development)
-                .icon(ContextCompat.getDrawable(context, R.drawable.ic_heart))
-                .setOnClickAction {
-                    startActivity(
-                        Intent(
-                            context,
-                            DonationActivity::class.java
-                        )
-                    )
-                }
-                .build())
+        miscCardBuilder.title("[Upstream] " + R.string.about)
             .addItem(MaterialAboutActionItem.Builder()
                 .text(R.string.changelog)
                 .icon(ContextCompat.getDrawable(context, R.drawable.ic_track_changes))
@@ -252,12 +244,6 @@ class FastHubAboutActivity : MaterialAboutActivity() {
             .subText(BuildConfig.VERSION_NAME)
             .setOnClickAction { startService(Intent(this, CheckVersionService::class.java)) }
             .build())
-            .addItem(
-                ConvenienceBuilder.createRateActionItem(
-                    context, ContextCompat.getDrawable(context, R.drawable.ic_star_filled),
-                    getString(R.string.rate_app), null
-                )
-            )
             .addItem(MaterialAboutActionItem.Builder()
                 .text(R.string.report_issue)
                 .subText(R.string.report_issue_here)
