@@ -4,13 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
-import butterknife.BindView
-import butterknife.OnClick
 import com.fastaccess.R
 import com.fastaccess.data.dao.FragmentPagerAdapterModel.Companion.buildForGists
 import com.fastaccess.helper.ActivityHelper
-import com.fastaccess.helper.BundleConstant
 import com.fastaccess.ui.adapter.FragmentsPagerAdapter
 import com.fastaccess.ui.base.BaseActivity
 import com.fastaccess.ui.base.BaseFragment
@@ -19,6 +17,7 @@ import com.fastaccess.ui.base.mvp.presenter.BasePresenter
 import com.fastaccess.ui.modules.gists.create.CreateGistActivity
 import com.fastaccess.ui.modules.main.MainActivity.Companion.launchMainActivity
 import com.fastaccess.ui.widgets.ViewPagerView
+import com.fastaccess.utils.setOnThrottleClickListener
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 
@@ -26,17 +25,9 @@ import com.google.android.material.tabs.TabLayout
  * Created by Kosh on 25 Mar 2017, 11:28 PM
  */
 class GistsListActivity : BaseActivity<BaseMvp.FAView, BasePresenter<BaseMvp.FAView>>() {
-    @JvmField
-    @BindView(R.id.tabs)
-    var tabs: TabLayout? = null
-
-    @JvmField
-    @BindView(R.id.gistsContainer)
-    var pager: ViewPagerView? = null
-
-    @JvmField
-    @BindView(R.id.fab)
-    var fab: FloatingActionButton? = null
+    private val tabs: TabLayout? by lazy { window.decorView.findViewById(R.id.tabs) }
+    private val pager: ViewPagerView? by lazy { window.decorView.findViewById(R.id.gistsContainer) }
+    private val fab: FloatingActionButton? by lazy { window.decorView.findViewById(R.id.fab) }
     override fun layout(): Int {
         return R.layout.gists_activity_layout
     }
@@ -57,6 +48,10 @@ class GistsListActivity : BaseActivity<BaseMvp.FAView, BasePresenter<BaseMvp.FAV
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        fab!!.setOnThrottleClickListener {
+            onViewClicked()
+        }
+
         setTitle(R.string.gists)
         setTaskName(getString(R.string.gists))
         setupTabs()
@@ -78,27 +73,16 @@ class GistsListActivity : BaseActivity<BaseMvp.FAView, BasePresenter<BaseMvp.FAV
         }
     }
 
-    @OnClick(R.id.fab)
-    fun onViewClicked() {
-        ActivityHelper.startReveal(
-            this,
+    private var createLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult(),
+    ) {}
+
+    private fun onViewClicked() {
+        ActivityHelper.startLauncher(
+            createLauncher,
             Intent(this, CreateGistActivity::class.java),
             fab!!,
-            BundleConstant.REQUEST_CODE
         )
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == RESULT_OK && requestCode == BundleConstant.REQUEST_CODE) {
-            if (pager != null && pager!!.adapter != null) {
-                (pager!!.adapter!!.instantiateItem(pager!!, 0) as Fragment).onActivityResult(
-                    resultCode,
-                    resultCode,
-                    data
-                )
-            }
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

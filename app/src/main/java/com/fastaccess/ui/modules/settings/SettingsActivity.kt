@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ListView
+import androidx.activity.result.contract.ActivityResultContracts
 import com.fastaccess.R
 import com.fastaccess.data.dao.SettingsModel
 import com.fastaccess.helper.ActivityHelper
@@ -107,19 +108,17 @@ class SettingsActivity : BaseActivity<FAView, BasePresenter<FAView>>(), Language
                     showLanguageList()
                 }
                 SettingsModel.THEME -> {
-                    ActivityHelper.startReveal(
-                        this,
+                    ActivityHelper.startLauncher(
+                        launcher,
                         Intent(this, ThemeActivity::class.java),
-                        view!!,
-                        THEME_CHANGE
+                        view,
                     )
                 }
                 SettingsModel.CODE_THEME -> {
-                    ActivityHelper.startReveal(
-                        this,
+                    ActivityHelper.startLauncher(
+                        launcher,
                         Intent(this, ThemeCodeActivity::class.java),
-                        view!!,
-                        THEME_CHANGE
+                        view
                     )
                 }
                 else -> {
@@ -129,10 +128,11 @@ class SettingsActivity : BaseActivity<FAView, BasePresenter<FAView>>(), Language
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == THEME_CHANGE && resultCode == RESULT_OK) {
-            setResult(resultCode)
+    private val launcher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult(),
+    ) {
+        it.data?.let {
+            setResult(THEME_CHANGE)
             finish()
         }
     }

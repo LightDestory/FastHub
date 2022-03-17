@@ -163,7 +163,7 @@ class CreateIssueActivity : BaseActivity<CreateIssueMvp.View, CreateIssuePresent
     override fun onShowIssueMisc() {
         TransitionManager.beginDelayedTransition(findViewById(R.id.parent))
         issueMiscLayout!!.visibility =
-            if (presenter!!.isCollaborator()) View.VISIBLE else View.GONE
+            if (presenter!!.isCollaborator) View.VISIBLE else View.GONE
         //TODO
     }
 
@@ -413,6 +413,8 @@ class CreateIssueActivity : BaseActivity<CreateIssueMvp.View, CreateIssuePresent
     }
 
     companion object {
+        @SuppressWarnings("deprecation")
+        @Deprecated("use registerForActivityResult")
         fun startForResult(
             fragment: Fragment,
             login: String,
@@ -443,6 +445,8 @@ class CreateIssueActivity : BaseActivity<CreateIssueMvp.View, CreateIssuePresent
             }
         }
 
+        @SuppressWarnings("deprecation")
+        @Deprecated("use registerForActivityResult")
         fun startForResult(
             activity: Activity, login: String, repoId: String,
             issueModel: Issue?, isEnterprise: Boolean
@@ -466,6 +470,8 @@ class CreateIssueActivity : BaseActivity<CreateIssueMvp.View, CreateIssuePresent
             }
         }
 
+        @SuppressWarnings("deprecation")
+        @Deprecated("use registerForActivityResult")
         fun startForResult(
             activity: Activity, login: String, repoId: String,
             pullRequestModel: PullRequest?, isEnterprise: Boolean
@@ -489,6 +495,8 @@ class CreateIssueActivity : BaseActivity<CreateIssueMvp.View, CreateIssuePresent
             }
         }
 
+        @SuppressWarnings("deprecation")
+        @Deprecated("use registerForActivityResult")
         fun getIntent(
             context: Context,
             login: String,
@@ -520,6 +528,8 @@ class CreateIssueActivity : BaseActivity<CreateIssueMvp.View, CreateIssuePresent
             return intent
         }
 
+        @SuppressWarnings("deprecation")
+        @Deprecated("use registerForActivityResult")
         fun startForResult(activity: Activity, intent: Intent, view: View) {
             ActivityHelper.startReveal(activity, intent, view, BundleConstant.REQUEST_CODE)
         }

@@ -193,6 +193,7 @@ class RepoPagerActivity : BaseActivity<RepoPagerMvp.View, RepoPagerPresenter>(),
     private var userInteracted = false
     private var accentColor = 0
     private var iconColor = 0
+
     @OnLongClick(R.id.date)
     fun onShowDateHint(): Boolean {
         showMessage(R.string.creation_date, R.string.creation_date_hint)
@@ -429,7 +430,7 @@ class RepoPagerActivity : BaseActivity<RepoPagerMvp.View, RepoPagerPresenter>(),
                 .add(R.id.container, DummyFragment(), "DummyFragment")
                 .commit()
         }
-        val myTypeface = TypeFaceHelper.getTypeface()
+        val myTypeface = TypeFaceHelper.typeface
         bottomNavigation!!.setDefaultTypeface(myTypeface)
         fab!!.imageTintList = ColorStateList.valueOf(Color.WHITE)
         showHideFab()
@@ -482,7 +483,7 @@ class RepoPagerActivity : BaseActivity<RepoPagerMvp.View, RepoPagerPresenter>(),
         bottomNavigation!!.menuItemSelectionListener = presenter
         if (repoModel.topics != null && !repoModel.topics.isEmpty()) {
             tagsIcon!!.visibility = View.VISIBLE
-            topicsList!!.adapter = TopicsAdapter(repoModel.topics)
+            topicsList!!.adapter = TopicsAdapter(repoModel.topics.filterNotNull().toMutableList())
         } else {
             topicsList!!.visibility = View.GONE
         }

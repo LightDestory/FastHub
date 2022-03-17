@@ -6,7 +6,6 @@ import android.os.Parcelable
 import android.view.View
 import androidx.annotation.StringRes
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import butterknife.BindView
 import com.fastaccess.R
 import com.fastaccess.data.dao.GitCommitModel
 import com.fastaccess.data.dao.NameParser
@@ -40,7 +39,7 @@ class FeedsFragment : BaseFragment<FeedsMvp.View, FeedsPresenter>(), FeedsMvp.Vi
     val fastScroller: RecyclerViewFastScroller? by lazy { binding.fastScroller }
 
     private var adapter: FeedsAdapter? = null
-    private var onLoadMore: OnLoadMore<String?>? = null
+    private var onLoadMore: OnLoadMore<String>? = null
     override fun fragmentLayout(): Int {
         return R.layout.micro_grid_refresh_list
     }
@@ -104,7 +103,7 @@ class FeedsFragment : BaseFragment<FeedsMvp.View, FeedsPresenter>(), FeedsMvp.Vi
     }
 
     override fun onOpenRepoChooser(models: List<SimpleUrlsModel>) {
-        val dialogView = ListDialogView<SimpleUrlsModel?>()
+        val dialogView = ListDialogView<SimpleUrlsModel>()
         dialogView.initArguments(getString(R.string.repo_chooser), models)
         dialogView.show(childFragmentManager, "ListDialogView")
     }
@@ -113,7 +112,7 @@ class FeedsFragment : BaseFragment<FeedsMvp.View, FeedsPresenter>(), FeedsMvp.Vi
         return FeedsPresenter()
     }
 
-    override val loadMore: OnLoadMore<String?>
+    override val loadMore: OnLoadMore<String>
         get() {
             if (onLoadMore == null) {
                 onLoadMore = OnLoadMore(presenter)
@@ -136,8 +135,7 @@ class FeedsFragment : BaseFragment<FeedsMvp.View, FeedsPresenter>(), FeedsMvp.Vi
         onRefresh()
     }
 
-    override fun onItemSelected(item: Parcelable?) {
-        item ?: return
+    override fun onItemSelected(item: Parcelable) {
         if (item is SimpleUrlsModel) {
             launchUri(requireContext(), Uri.parse(item.item))
         } else if (item is GitCommitModel) {

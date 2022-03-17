@@ -16,7 +16,7 @@ class EditorLinkImagePresenter : BasePresenter<EditorLinkImageMvp.View>(),
         if (file.exists()) {
             val image: RequestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
             makeRestCall(
-                ImgurProvider.getImgurService().postImage(title ?: "", image),
+                ImgurProvider.imgurService.postImage(title ?: "", image),
                 { imgurResponseModel ->
                     if (imgurResponseModel.data != null) {
                         val imageResponse = imgurResponseModel.data!!

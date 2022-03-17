@@ -512,9 +512,8 @@ open class PullRequestPagerActivity :
         presenter!!.onPutAssignees(users, isAssignees)
     }
 
-    override fun getData(): PullRequest? {
-        return presenter!!.getPullRequest()
-    }
+    override val data: PullRequest?
+        get() = presenter!!.getPullRequest()
 
     override fun onSendActionClicked(text: String, bundle: Bundle?) {
         val fragment = pullRequestTimelineFragment

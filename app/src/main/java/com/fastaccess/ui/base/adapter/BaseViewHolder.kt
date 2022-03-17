@@ -23,7 +23,7 @@ abstract class BaseViewHolder<T>(
     @JvmField
     protected val adapter: BaseRecyclerAdapter<T, *, OnItemClickListener<T>>?
 
-    protected constructor(itemView: View) : this(itemView, null) {}
+    protected constructor(itemView: View) : this(itemView, null)
 
     override fun onClick(v: View) {
         if (adapter?.listener != null) {

@@ -47,7 +47,6 @@ class RepoOpenedIssuesFragment : BaseFragment<RepoIssuesMvp.View, RepoIssuesPres
     @JvmField
     @BindView(R.id.fastScroller)
     var fastScroller: RecyclerViewFastScroller? = null
-    private var onLoadMore: OnLoadMore<IssueState>? = null
     private var adapter: IssuesAdapter? = null
     private var pagerCallback: RepoIssuesPagerMvp.View? = null
     private var tabsBadgeListener: TabsBadgeListener? = null
@@ -99,7 +98,7 @@ class RepoOpenedIssuesFragment : BaseFragment<RepoIssuesMvp.View, RepoIssuesPres
         adapter = IssuesAdapter(presenter!!.issues, true)
         adapter!!.listener = presenter
         loadMore.initialize(presenter!!.currentPage, presenter!!.previousTotal)
-        recycler!!.setAdapter(adapter)
+        recycler!!.adapter = adapter
         recycler!!.addKeyLineDivider()
         recycler!!.addOnScrollListener(loadMore)
         if (savedInstanceState == null) {
@@ -153,17 +152,13 @@ class RepoOpenedIssuesFragment : BaseFragment<RepoIssuesMvp.View, RepoIssuesPres
         super.showMessage(titleRes, msgRes)
     }
 
-    override fun getLoadMore(): OnLoadMore<IssueState> {
-        if (onLoadMore == null) {
-            onLoadMore = object : OnLoadMore<IssueState>(presenter) {
-                override fun onScrolled(isUp: Boolean) {
-                    super.onScrolled(isUp)
-                    if (pagerCallback != null) pagerCallback!!.onScrolled(isUp)
-                }
+    override val loadMore: OnLoadMore<IssueState> by lazy {
+        object : OnLoadMore<IssueState>(presenter) {
+            override fun onScrolled(isUp: Boolean) {
+                super.onScrolled(isUp)
+                if (pagerCallback != null) pagerCallback!!.onScrolled(isUp)
             }
         }
-        onLoadMore!!.parameter = IssueState.open
-        return onLoadMore!!
     }
 
     override fun onAddIssue() {

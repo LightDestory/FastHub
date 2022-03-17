@@ -33,7 +33,7 @@ abstract class BaseRecyclerAdapter<M, VH : BaseViewHolder<M>, P : BaseViewHolder
     }
 
     @Suppress("UNCHECKED_CAST")
-    constructor(list: List<M>, listener: P?) {
+    constructor(list: MutableList<M>, listener: P?) {
         this.data = list as MutableList<M?>
         this.listener = listener
     }

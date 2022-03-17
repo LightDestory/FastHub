@@ -245,7 +245,7 @@ class MainActivity : BaseActivity<MainMvp.View, MainPresenter>(), MainMvp.View {
                         .commit()
                 }
             }
-            val myTypeface = TypeFaceHelper.getTypeface()
+            val myTypeface = TypeFaceHelper.typeface
             bottomNavigation!!.setDefaultTypeface(myTypeface)
             bottomNavigation!!.menuItemSelectionListener = presenter
         }

@@ -14,6 +14,7 @@ import com.fastaccess.helper.ViewHelper
 import com.fastaccess.provider.markdown.MarkDownProvider
 import com.fastaccess.provider.scheme.LinkParserHelper
 import com.fastaccess.provider.timeline.handler.drawable.DrawableGetter
+import com.fastaccess.ui.adapter.CommitCommentsAdapter
 import com.fastaccess.ui.adapter.callback.OnToggleView
 import com.fastaccess.ui.widgets.AvatarLayout
 import com.fastaccess.ui.widgets.FontTextView
@@ -26,7 +27,7 @@ import java.util.*
  * Created by kosh on 15/08/2017.
  */
 class CommitCommentsViewHolder private constructor(
-    view: View, adapter: BaseRecyclerAdapter<Comment, CommitCommentsViewHolder, OnItemClickListener<Comment>>,
+    view: View, adapter: CommitCommentsAdapter,
     val viewGroup: ViewGroup, val onToggleView: OnToggleView
 ) : BaseViewHolder<Comment>(view, adapter) {
 
@@ -124,7 +125,7 @@ class CommitCommentsViewHolder private constructor(
     companion object {
         fun newInstance(
             parent: ViewGroup,
-            adapter: BaseRecyclerAdapter<Comment, CommitCommentsViewHolder, OnItemClickListener<Comment>>,
+            adapter: CommitCommentsAdapter,
             onToggleView: OnToggleView
         ): CommitCommentsViewHolder {
             return CommitCommentsViewHolder(
