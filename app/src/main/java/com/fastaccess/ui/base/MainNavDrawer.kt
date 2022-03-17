@@ -23,7 +23,7 @@ class MainNavDrawer(val view: BaseActivity<*, *>, private val extraNav: Navigati
         viewpager?.let {
             it.adapter = FragmentsPagerAdapter(
                 view.supportFragmentManager,
-                FragmentPagerAdapterModel.buildForDrawer(view)
+                FragmentPagerAdapterModel.buildForDrawer(view),
             )
             view.findViewById<TabLayout>(R.id.drawerTabLayout)?.setupWithViewPager(it)
         }

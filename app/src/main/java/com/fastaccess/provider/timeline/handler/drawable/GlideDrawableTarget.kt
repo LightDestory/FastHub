@@ -36,13 +36,13 @@ internal class GlideDrawableTarget(
                 urlDrawable.setDrawable(resource)
                 if (resource is GifDrawable) {
                     urlDrawable.callback =
-                        textView.getTag(R.id.drawable_callback) as Drawable.Callback
+                        textView.getTag(R.id.drawable_callback) as Drawable.Callback?
                     resource.setLoopCount(GifDrawable.LOOP_FOREVER)
                     resource.start()
                 } else if (resource is Animatable) {
                     val animate = resource as Animatable
                     urlDrawable.callback =
-                        textView.getTag(R.id.drawable_callback) as Drawable.Callback
+                        textView.getTag(R.id.drawable_callback) as Drawable.Callback?
                     animate.start()
                 }
                 textView.text = textView.text

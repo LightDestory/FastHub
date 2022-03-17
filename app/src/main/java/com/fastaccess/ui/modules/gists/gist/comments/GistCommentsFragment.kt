@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import butterknife.BindView
@@ -159,6 +160,35 @@ class GistCommentsFragment : BaseFragment<GistCommentsMvp.View, GistCommentsPres
             return onLoadMore!!
         }
 
+    private val launcher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult(),
+    ) {
+        val data = it.data
+        if (data == null) {
+            onRefresh()
+            return@registerForActivityResult
+        }
+        val bundle = data.extras
+        if (bundle != null) {
+            val isNew = bundle.getBoolean(BundleConstant.EXTRA)
+            val commentsModel: Comment = bundle.getParcelable(BundleConstant.ITEM)
+                ?: return@registerForActivityResult
+            if (isNew) {
+                adapter!!.addItem(commentsModel)
+                recycler!!.smoothScrollToPosition(adapter!!.itemCount)
+            } else {
+                val position = adapter!!.getItem(commentsModel)
+                if (position != -1) {
+                    adapter!!.swapItem(commentsModel, position)
+                    recycler!!.smoothScrollToPosition(position)
+                } else {
+                    adapter!!.addItem(commentsModel)
+                    recycler!!.smoothScrollToPosition(adapter!!.itemCount)
+                }
+            }
+        }
+    }
+
     override fun onEditComment(item: Comment) {
         val intent = Intent(context, EditorActivity::class.java)
         intent.putExtras(
@@ -176,7 +206,7 @@ class GistCommentsFragment : BaseFragment<GistCommentsMvp.View, GistCommentsPres
             if (activity != null && requireActivity().findViewById<View?>(R.id.fab) != null) requireActivity().findViewById<View>(
                 R.id.fab
             ) else recycler!!
-        ActivityHelper.startReveal(this, intent, view, BundleConstant.REQUEST_CODE)
+        ActivityHelper.startLauncher(launcher, intent, view)
     }
 
     override fun onShowDeleteMsg(id: Long) {
@@ -227,37 +257,6 @@ class GistCommentsFragment : BaseFragment<GistCommentsMvp.View, GistCommentsPres
 
     override fun onClick(view: View) {
         onRefresh()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == BundleConstant.REQUEST_CODE) {
-                if (data == null) {
-                    onRefresh()
-                    return
-                }
-                val bundle = data.extras
-                if (bundle != null) {
-                    val isNew = bundle.getBoolean(BundleConstant.EXTRA)
-                    val commentsModel: Comment = bundle.getParcelable(BundleConstant.ITEM)
-                        ?: return
-                    if (isNew) {
-                        adapter!!.addItem(commentsModel)
-                        recycler!!.smoothScrollToPosition(adapter!!.itemCount)
-                    } else {
-                        val position = adapter!!.getItem(commentsModel)
-                        if (position != -1) {
-                            adapter!!.swapItem(commentsModel, position)
-                            recycler!!.smoothScrollToPosition(position)
-                        } else {
-                            adapter!!.addItem(commentsModel)
-                            recycler!!.smoothScrollToPosition(adapter!!.itemCount)
-                        }
-                    }
-                }
-            }
-        }
     }
 
     override fun onMessageDialogActionClicked(isOk: Boolean, bundle: Bundle?) {

@@ -143,9 +143,9 @@ class UnreadNotificationsFragment :
         stateLayout!!.hideProgress()
     }
 
-    override fun showErrorMessage(message: String) {
+    override fun showErrorMessage(msgRes: String) {
         showReload()
-        super.showErrorMessage(message)
+        super.showErrorMessage(msgRes)
     }
 
     override fun showMessage(titleRes: Int, msgRes: Int) {
@@ -163,7 +163,7 @@ class UnreadNotificationsFragment :
             if (adapter!!.data.isNotEmpty()) {
                 newInstance(
                     getString(R.string.mark_all_as_read), getString(R.string.confirm_message),
-                    false, false, Bundler.start()
+                    isMarkDown = false, hideCancel = false, bundle = Bundler.start()
                         .put("primary_button", getString(R.string.yes))
                         .put("secondary_button", getString(R.string.no))
                         .end()
@@ -176,7 +176,7 @@ class UnreadNotificationsFragment :
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        val hasUnread = !adapter!!.data.isEmpty()
+        val hasUnread = adapter!!.data.isNotEmpty()
         menu.findItem(R.id.readAll).isVisible = hasUnread
         super.onPrepareOptionsMenu(menu)
     }

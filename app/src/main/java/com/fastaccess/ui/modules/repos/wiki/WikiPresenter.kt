@@ -50,7 +50,7 @@ class WikiPresenter : BasePresenter<WikiMvp.View>(), WikiMvp.Presenter {
     }
 
     private fun callApi(sidebar: WikiSideBarModel) {
-        manageViewDisposable(RxHelper.getObservable(JsoupProvider.getWiki().getWiki(sidebar.link))
+        manageViewDisposable(RxHelper.getObservable(JsoupProvider.wiki.getWiki(sidebar.link))
             .flatMap { s -> RxHelper.getObservable(getWikiContent(s)) }
             .doOnSubscribe { sendToView { it.showProgress(0) } }
             .subscribe(

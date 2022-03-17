@@ -102,14 +102,18 @@ class IssuePagerActivity : BaseActivity<IssuePagerMvp.View, IssuePagerPresenter>
     @State
     var isOpened = false
     private var commentEditorFragment: CommentEditorFragment? = null
+
+    override val data: Issue?
+        get() = presenter?.issue
+
     @OnClick(R.id.detailsIcon)
     fun onTitleClick() {
         if (presenter!!.issue != null && !isEmpty(
                 presenter!!.issue!!.title
             )
         ) newInstance(
-            String.format("%s/%s", presenter!!.getLogin(), presenter!!.getRepoId()),
-            presenter!!.issue!!.title, false, true
+            String.format("%s/%s", presenter!!.login, presenter!!.repoId),
+            presenter!!.issue!!.title, isMarkDown = false, hideCancel = true
         )
             .show(supportFragmentManager, MessageDialogView.TAG)
     }
@@ -188,7 +192,8 @@ class IssuePagerActivity : BaseActivity<IssuePagerMvp.View, IssuePagerPresenter>
                     if (issueModel.state === IssueState.open) getString(R.string.close_issue) else getString(
                         R.string.re_open_issue
                     ),
-                    getString(R.string.confirm_message), Bundler.start().put(BundleConstant.EXTRA, true)
+                    getString(R.string.confirm_message),
+                    Bundler.start().put(BundleConstant.EXTRA, true)
                         .put(BundleConstant.YES_NO_EXTRA, true).end()
                 )
                     .show(supportFragmentManager, MessageDialogView.TAG)
@@ -213,29 +218,29 @@ class IssuePagerActivity : BaseActivity<IssuePagerMvp.View, IssuePagerPresenter>
                 LabelsDialogFragment.newInstance(
                     if (presenter!!.issue != null) presenter!!.issue!!
                         .labels else null,
-                    presenter!!.getRepoId(), presenter!!.getLogin()
+                    presenter!!.repoId!!, presenter!!.login!!
                 )
                     .show(supportFragmentManager, "LabelsDialogFragment")
                 return true
             }
             R.id.edit -> {
                 CreateIssueActivity.startForResult(
-                    this, presenter!!.getLogin(), presenter!!.getRepoId(),
+                    this, presenter!!.login!!, presenter!!.repoId!!,
                     presenter!!.issue, isEnterprise
                 )
                 return true
             }
             R.id.milestone -> {
                 MilestoneDialogFragment.newInstance(
-                    presenter!!.getLogin(), presenter!!.getRepoId()
+                    presenter!!.login!!, presenter!!.repoId!!
                 )
                     .show(supportFragmentManager, "MilestoneDialogFragment")
                 return true
             }
             R.id.assignees -> {
                 AssigneesDialogFragment.newInstance(
-                    presenter!!.getLogin(),
-                    presenter!!.getRepoId(),
+                    presenter!!.login!!,
+                    presenter!!.repoId!!,
                     true
                 )
                     .show(supportFragmentManager, "AssigneesDialogFragment")
@@ -276,7 +281,7 @@ class IssuePagerActivity : BaseActivity<IssuePagerMvp.View, IssuePagerPresenter>
         val pinUnpin = menu.findItem(R.id.pinUnpin)
         val isOwner = presenter!!.isOwner
         val isLocked = presenter!!.isLocked
-        val isCollaborator = presenter!!.isCollaborator()
+        val isCollaborator = presenter!!.isCollaborator
         val isRepoOwner = presenter!!.isRepoOwner
         editMenu.isVisible = isOwner || isCollaborator || isRepoOwner
         milestone.isVisible = isCollaborator || isRepoOwner
@@ -383,9 +388,6 @@ class IssuePagerActivity : BaseActivity<IssuePagerMvp.View, IssuePagerPresenter>
         finish()
     }
 
-    override fun getData(): Issue? {
-        return presenter!!.issue
-    }
 
     override fun onMessageDialogActionClicked(isOk: Boolean, bundle: Bundle?) {
         super.onMessageDialogActionClicked(isOk, bundle)
@@ -405,8 +407,8 @@ class IssuePagerActivity : BaseActivity<IssuePagerMvp.View, IssuePagerPresenter>
     override fun onNavToRepoClicked() {
         val intent = ActivityHelper.editBundle(
             RepoPagerActivity.createIntent(
-                this, presenter!!.getRepoId(),
-                presenter!!.getLogin(), RepoPagerMvp.ISSUES
+                this, presenter!!.repoId!!,
+                presenter!!.login!!, RepoPagerMvp.ISSUES
             ), isEnterprise
         )
         startActivity(intent)
@@ -458,7 +460,7 @@ class IssuePagerActivity : BaseActivity<IssuePagerMvp.View, IssuePagerPresenter>
         ) as IssueTimelineFragment
 
     private fun hideShowFab() {
-        if (presenter!!.isLocked && !presenter!!.isOwner && !presenter!!.isCollaborator()) {
+        if (presenter!!.isLocked && !presenter!!.isOwner && !presenter!!.isCollaborator) {
             supportFragmentManager.beginTransaction().hide(commentEditorFragment!!).commit()
             return
         }
@@ -485,7 +487,9 @@ class IssuePagerActivity : BaseActivity<IssuePagerMvp.View, IssuePagerPresenter>
                 .append(
                     ContextCompat.getDrawable(
                         this,
-                        if (issueModel.state === IssueState.open) R.drawable.ic_issue_opened_small else R.drawable.ic_issue_closed_small
+                        if (issueModel.state === IssueState.open)
+                            R.drawable.ic_issue_opened_small else
+                            R.drawable.ic_issue_closed_small
                     )
                 )
                 .append(" ")

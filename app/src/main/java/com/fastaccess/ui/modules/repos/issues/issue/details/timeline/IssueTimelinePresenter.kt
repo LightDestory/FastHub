@@ -51,9 +51,6 @@ class IssueTimelinePresenter : BasePresenter<IssueTimelineMvp.View>(), IssueTime
     @com.evernote.android.state.State
     var isCollaborator = false
     private var commentId: Long = 0
-    fun getCommentId(): Long {
-        return commentId
-    }
 
     override fun isPreviouslyReacted(commentId: Long, vId: Int): Boolean {
         return reactionsProvider!!.isPreviouslyReacted(commentId, vId)
@@ -100,22 +97,22 @@ class IssueTimelinePresenter : BasePresenter<IssueTimelineMvp.View>(), IssueTime
                 } else if (issueEventModel.label != null) {
                     FilterIssuesActivity.startActivity(
                         v!!, issue.login, issue.repoId, true,
-                        true, isEnterprise, "label:\"" + issueEventModel.label!!.name + "\""
+                        isOpen = true, isEnterprise = isEnterprise, criteria = "label:\"" + issueEventModel.label!!.name + "\""
                     )
                 } else if (issueEventModel.milestone != null) {
                     FilterIssuesActivity.startActivity(
                         v!!,
                         issue.login,
                         issue.repoId,
-                        true,
-                        true,
-                        isEnterprise,
-                        "milestone:\"" + issueEventModel.milestone!!.title + "\""
+                        isIssue = true,
+                        isOpen = true,
+                        isEnterprise = isEnterprise,
+                        criteria = "milestone:\"" + issueEventModel.milestone!!.title + "\""
                     )
                 } else if (issueEventModel.assignee != null) {
                     FilterIssuesActivity.startActivity(
-                        v!!, issue.login, issue.repoId, true,
-                        true, isEnterprise, "assignee:\"" + issueEventModel.assignee!!.login + "\""
+                        v!!, issue.login, issue.repoId, isIssue = true,
+                        isOpen = true, isEnterprise = isEnterprise, criteria = "assignee:\"" + issueEventModel.assignee!!.login + "\""
                     )
                 } else {
                     val sourceModel = issueEventModel.source
@@ -157,7 +154,10 @@ class IssueTimelinePresenter : BasePresenter<IssueTimelineMvp.View>(), IssueTime
                                     ?: return@setOnMenuItemClickListener false
                                 CreateIssueActivity.startForResult(
                                     activity,
-                                    item.issue!!.login, item.issue!!.repoId, item.issue, isEnterprise
+                                    item.issue!!.login,
+                                    item.issue!!.repoId,
+                                    item.issue,
+                                    isEnterprise
                                 )
                             }
                             R.id.share -> {
@@ -209,9 +209,8 @@ class IssueTimelinePresenter : BasePresenter<IssueTimelineMvp.View>(), IssueTime
         }
     }
 
-    override fun getEvents(): ArrayList<TimelineModel> {
-        return timeline
-    }
+    override val events: ArrayList<TimelineModel>
+        get() = timeline
 
     override fun onWorkOffline() {
         //TODO
@@ -223,9 +222,10 @@ class IssueTimelinePresenter : BasePresenter<IssueTimelineMvp.View>(), IssueTime
             if (commId != 0L) {
                 if (view == null || view!!.issue == null) return
                 val issue = view!!.issue
-                makeRestCall(getIssueService(isEnterprise).deleteIssueComment(
-                    issue!!.login, issue.repoId, commId
-                )
+                makeRestCall(
+                    getIssueService(isEnterprise).deleteIssueComment(
+                        issue!!.login, issue.repoId, commId
+                    )
                 ) { booleanResponse ->
                     sendToView { view ->
                         if (booleanResponse.code() == 204) {

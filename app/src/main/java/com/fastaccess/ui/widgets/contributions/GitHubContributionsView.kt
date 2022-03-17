@@ -9,8 +9,11 @@ import com.fastaccess.ui.widgets.contributions.utils.DatesUtils.getShortMonthNam
 import android.view.WindowManager
 import android.content.res.TypedArray
 import android.graphics.*
+import android.os.Build
 import android.util.AttributeSet
+import android.view.Display
 import android.view.View
+import android.view.WindowInsets
 import com.fastaccess.R
 import java.lang.IllegalArgumentException
 import java.lang.RuntimeException
@@ -62,9 +65,25 @@ class GitHubContributionsView : View {
     }
 
     private fun init(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) {
-        (getContext().getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay.getSize(
-            point
-        )
+        val windowManage = getContext().getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // https://stackoverflow.com/questions/63719160/getsize-deprecated-in-api-level-30
+            val windowMetrics = windowManage.currentWindowMetrics
+            val windowInsets: WindowInsets = windowManage.currentWindowMetrics.windowInsets
+            val insets = windowInsets.getInsetsIgnoringVisibility(
+                WindowInsets.Type.navigationBars() or WindowInsets.Type.displayCutout()
+            )
+            val insetsWidth = insets.right + insets.left
+            val insetsHeight = insets.top + insets.bottom
+            val b = windowMetrics.bounds
+            point.x = b.width() - insetsWidth
+            point.y = b.height() - insetsHeight
+        } else {
+            windowManage.defaultDisplay.getSize(
+                point
+            )
+        }
+
         val attributes = context.theme.obtainStyledAttributes(
             attrs, R.styleable.GitHubContributionsView, defStyleAttr, defStyleRes
         )

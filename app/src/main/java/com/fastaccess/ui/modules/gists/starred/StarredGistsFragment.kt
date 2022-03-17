@@ -4,11 +4,13 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import butterknife.BindView
 import com.fastaccess.R
 import com.fastaccess.data.dao.model.Gist
+import com.fastaccess.helper.ActivityHelper
 import com.fastaccess.helper.BundleConstant
 import com.fastaccess.provider.rest.loadmore.OnLoadMore
 import com.fastaccess.ui.adapter.GistsAdapter
@@ -110,26 +112,40 @@ class StarredGistsFragment : BaseFragment<StarredGistsMvp.View, StarredGistsPres
             return onLoadMore!!
         }
 
+    private val launcher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult(),
+    ) {
+        val data = it.data
+        if (data != null && data.extras != null) {
+            val gistsModel: Gist? = data.extras!!.getParcelable(BundleConstant.ITEM)
+            if (gistsModel != null && adapter != null) {
+                adapter!!.removeItem(gistsModel)
+            }
+        } else {
+            onRefresh()
+        }
+    }
+
     override fun onStartGistView(gistId: String) {
-        startActivityForResult(
+        ActivityHelper.startLauncher(
+            launcher,
             createIntent(requireContext(), gistId, isEnterprise),
-            BundleConstant.REQUEST_CODE
         )
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == BundleConstant.REQUEST_CODE) {
-            if (data != null && data.extras != null) {
-                val gistsModel: Gist? = data.extras!!.getParcelable(BundleConstant.ITEM)
-                if (gistsModel != null && adapter != null) {
-                    adapter!!.removeItem(gistsModel)
-                }
-            } else {
-                onRefresh()
-            }
-        }
-    }
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        if (resultCode == Activity.RESULT_OK && requestCode == BundleConstant.REQUEST_CODE) {
+//            if (data != null && data.extras != null) {
+//                val gistsModel: Gist? = data.extras!!.getParcelable(BundleConstant.ITEM)
+//                if (gistsModel != null && adapter != null) {
+//                    adapter!!.removeItem(gistsModel)
+//                }
+//            } else {
+//                onRefresh()
+//            }
+//        }
+//    }
 
     override fun onClick(view: View) {
         onRefresh()

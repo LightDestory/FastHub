@@ -1,27 +1,28 @@
 package com.fastaccess.ui.modules.gists.create
 
-import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import androidx.fragment.app.Fragment
-import butterknife.BindView
-import butterknife.OnClick
+import androidx.activity.result.ActivityResultLauncher
 import com.evernote.android.state.State
 import com.fastaccess.R
 import com.fastaccess.data.dao.FilesListModel
 import com.fastaccess.data.dao.model.Gist
 import com.fastaccess.data.dao.model.Login
-import com.fastaccess.helper.*
+import com.fastaccess.helper.BundleConstant
+import com.fastaccess.helper.Bundler
 import com.fastaccess.helper.InputHelper.isEmpty
 import com.fastaccess.helper.InputHelper.toString
-import com.fastaccess.helper.Logger.e
+import com.fastaccess.helper.PrefGetter
+import com.fastaccess.helper.ViewHelper
 import com.fastaccess.ui.base.BaseActivity
 import com.fastaccess.ui.modules.gists.gist.files.GistFilesListFragment
 import com.fastaccess.ui.widgets.dialog.MessageDialogView
 import com.fastaccess.ui.widgets.dialog.MessageDialogView.Companion.newInstance
+import com.fastaccess.utils.setOnThrottleClickListener
 import com.google.android.material.textfield.TextInputLayout
 
 /**
@@ -29,20 +30,14 @@ import com.google.android.material.textfield.TextInputLayout
  */
 class CreateGistActivity : BaseActivity<CreateGistMvp.View, CreateGistPresenter>(),
     CreateGistMvp.View {
-    @JvmField
-    @BindView(R.id.description)
-    var description: TextInputLayout? = null
-
-    @JvmField
-    @BindView(R.id.buttonsHolder)
-    var buttonsHolder: View? = null
+    val description: TextInputLayout? by lazy { window.decorView.findViewById(R.id.description) }
+    private val buttonsHolder: View? by lazy { window.decorView.findViewById(R.id.buttonsHolder) }
 
     @JvmField
     @State
     var id: String? = null
     private var filesListFragment: GistFilesListFragment? = null
 
-    @OnClick(value = [R.id.createPublicGist, R.id.createSecretGist])
     fun onClick(view: View) {
         presenter!!.onSubmit(
             toString(description?.editText?.text.toString()),
@@ -50,7 +45,6 @@ class CreateGistActivity : BaseActivity<CreateGistMvp.View, CreateGistPresenter>
         )
     }
 
-    @OnClick(R.id.addFile)
     fun onViewClicked() {
         filesFragment!!.onAddNewFile()
     }
@@ -92,6 +86,17 @@ class CreateGistActivity : BaseActivity<CreateGistMvp.View, CreateGistPresenter>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val root = window.decorView
+        listOf<View>(
+            root.findViewById(R.id.createPublicGist),
+            root.findViewById(R.id.createSecretGist),
+        ).setOnThrottleClickListener {
+            onClick(it)
+        }
+        root.findViewById<View>(R.id.addFile).setOnThrottleClickListener {
+            onViewClicked()
+        }
+
         presenter!!.isEnterprise = PrefGetter.isEnterprise
         setTaskName(getString(R.string.create_gist))
         if (savedInstanceState == null) {
@@ -159,17 +164,10 @@ class CreateGistActivity : BaseActivity<CreateGistMvp.View, CreateGistPresenter>
 
     companion object {
         @JvmStatic
-        fun start(context: Activity, gistsModel: Gist) {
+        fun launcher(context: Context, l: ActivityResultLauncher<Intent>, gistsModel: Gist) {
             val starter = Intent(context, CreateGistActivity::class.java)
             putBundle(gistsModel, starter)
-            context.startActivityForResult(starter, BundleConstant.REQUEST_CODE)
-        }
-
-        @JvmStatic
-        fun start(context: Fragment, gistsModel: Gist) {
-            val starter = Intent(context.context, CreateGistActivity::class.java)
-            putBundle(gistsModel, starter)
-            context.startActivityForResult(starter, BundleConstant.REQUEST_CODE)
+            l.launch(starter)
         }
 
         @JvmStatic

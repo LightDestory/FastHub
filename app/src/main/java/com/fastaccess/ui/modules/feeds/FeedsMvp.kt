@@ -18,15 +18,15 @@ import com.fastaccess.data.dao.model.Event
  */
 interface FeedsMvp {
     interface View : FAView, OnRefreshListener, android.view.View.OnClickListener,
-        OnSimpleItemSelection<Parcelable?> {
+        OnSimpleItemSelection<Parcelable> {
         fun onNotifyAdapter(events: List<Event>, page: Int)
         fun onOpenRepoChooser(models: List<SimpleUrlsModel>)
-        val loadMore: OnLoadMore<String?>
+        val loadMore: OnLoadMore<String>
         fun onOpenCommitChooser(commits: List<GitCommitModel>)
     }
 
     interface Presenter : FAPresenter, BaseViewHolder.OnItemClickListener<Event>,
-        PaginationListener<String?> {
+        PaginationListener<String> {
         fun onFragmentCreated(argument: Bundle)
         fun onCallApi(page: Int): Boolean
         val events: MutableList<Event>

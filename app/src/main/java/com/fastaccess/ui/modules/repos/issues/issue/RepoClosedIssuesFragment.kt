@@ -95,10 +95,10 @@ class RepoClosedIssuesFragment : BaseFragment<RepoIssuesMvp.View, RepoIssuesPres
         recycler!!.setEmptyView(stateLayout!!, refresh)
         adapter = IssuesAdapter(presenter!!.issues, true)
         adapter!!.listener = presenter
-        loadMore.initialize(presenter.currentPage, presenter.previousTotal)
+        loadMore!!.initialize(presenter.currentPage, presenter.previousTotal)
         recycler!!.adapter = adapter
         recycler!!.addKeyLineDivider()
-        recycler!!.addOnScrollListener(loadMore)
+        recycler!!.addOnScrollListener(loadMore!!)
         if (savedInstanceState == null) {
             presenter!!.onFragmentCreated(requireArguments(), IssueState.closed)
         } else if (presenter!!.issues.isEmpty() && !presenter!!.isApiCalled) {
@@ -131,18 +131,30 @@ class RepoClosedIssuesFragment : BaseFragment<RepoIssuesMvp.View, RepoIssuesPres
         super.showMessage(titleRes, msgRes)
     }
 
-    override fun getLoadMore(): OnLoadMore<IssueState> {
-        if (onLoadMore == null) {
-            onLoadMore = object : OnLoadMore<IssueState>(presenter) {
-                override fun onScrolled(isUp: Boolean) {
-                    super.onScrolled(isUp)
-                    if (pagerCallback != null) pagerCallback!!.onScrolled(isUp)
+    override var loadMore: OnLoadMore<IssueState>? = null
+        get() {
+            if (field == null) {
+                field = object : OnLoadMore<IssueState>(presenter) {
+                    override fun onScrolled(isUp: Boolean) {
+                        super.onScrolled(isUp)
+                        if (pagerCallback != null) pagerCallback!!.onScrolled(isUp)
+                    }
                 }
             }
+            return field
         }
-        onLoadMore!!.parameter = IssueState.closed
-        return onLoadMore!!
-    }
+//    override fun getLoadMore(): OnLoadMore<IssueState> {
+//        if (onLoadMore == null) {
+//            onLoadMore = object : OnLoadMore<IssueState>(presenter) {
+//                override fun onScrolled(isUp: Boolean) {
+//                    super.onScrolled(isUp)
+//                    if (pagerCallback != null) pagerCallback!!.onScrolled(isUp)
+//                }
+//            }
+//        }
+//        onLoadMore!!.parameter = IssueState.closed
+//        return onLoadMore!!
+//    }
 
     override fun onAddIssue() {
         //DO NOTHING

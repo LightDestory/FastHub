@@ -22,14 +22,14 @@ import java.util.ArrayList
 /**
  * Created by Kosh on 31 Dec 2016, 3:19 PM
  */
-class ListDialogView<O : Parcelable?> :
+class ListDialogView<O : Parcelable> :
     BaseDialogFragment<BaseMvp.FAView, BasePresenter<BaseMvp.FAView>>(),
     BaseViewHolder.OnItemClickListener<O> {
     lateinit var title: FontTextView
     lateinit var recycler: DynamicRecyclerView
     lateinit var fastScroller: RecyclerViewFastScroller
 
-    interface OnSimpleItemSelection<T : Parcelable?> {
+    interface OnSimpleItemSelection<T : Parcelable> {
         fun onItemSelected(item: T)
     }
 
@@ -95,12 +95,12 @@ class ListDialogView<O : Parcelable?> :
             .end()
     }
 
-    fun initArguments(title: String, objects: List<O?>) {
+    fun initArguments(title: String, objects: List<O>) {
         arguments = Bundler.start()
             .put(BundleConstant.EXTRA, title)
             .putParcelableArrayList(
                 BundleConstant.ITEM,
-                objects.toMutableList() as ArrayList<out Parcelable?>
+                objects.toMutableList() as ArrayList<out Parcelable>
             )
             .end()
     }

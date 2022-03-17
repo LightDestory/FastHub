@@ -67,7 +67,7 @@ class PinnedGistFragment : BaseFragment<PinnedGistMvp.View, PinnedGistPresenter>
         recycler!!.adapter = adapter
         recycler!!.addKeyLineDivider()
         refresh!!.setOnRefreshListener { presenter!!.onReload() }
-        stateLayout!!.setOnReloadListener { v: View? -> presenter!!.onReload() }
+        stateLayout!!.setOnReloadListener { presenter!!.onReload() }
         if (savedInstanceState == null) {
             stateLayout!!.showProgress()
         }

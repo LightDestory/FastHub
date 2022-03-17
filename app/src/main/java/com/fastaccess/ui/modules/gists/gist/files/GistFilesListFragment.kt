@@ -180,8 +180,10 @@ class GistFilesListFragment : BaseFragment<GistFilesListMvp.View, GistFilesListP
         if (item.rawUrl == null) return false
         if (item.size!! > FileHelper.ONE_MB && !isImage(item.rawUrl)) {
             newInstance(
-                getString(R.string.big_file), getString(R.string.big_file_description), false, true,
-                Bundler.start().put(BundleConstant.YES_NO_EXTRA, true)
+                getString(R.string.big_file), getString(R.string.big_file_description),
+                isMarkDown = false,
+                hideCancel = true,
+                bundle = Bundler.start().put(BundleConstant.YES_NO_EXTRA, true)
                     .put(BundleConstant.EXTRA, item.rawUrl).end()
             )
                 .show(childFragmentManager, "MessageDialogView")

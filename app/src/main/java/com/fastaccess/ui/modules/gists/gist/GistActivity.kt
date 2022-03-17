@@ -7,6 +7,7 @@ import android.text.format.Formatter
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager.SimpleOnPageChangeListener
@@ -33,7 +34,7 @@ import com.fastaccess.ui.base.BaseActivity
 import com.fastaccess.ui.base.BaseFragment
 import com.fastaccess.ui.modules.editor.comment.CommentEditorFragment
 import com.fastaccess.ui.modules.gists.GistsListActivity
-import com.fastaccess.ui.modules.gists.create.CreateGistActivity.Companion.start
+import com.fastaccess.ui.modules.gists.create.CreateGistActivity.Companion.launcher
 import com.fastaccess.ui.modules.gists.gist.comments.GistCommentsFragment
 import com.fastaccess.ui.modules.main.premium.PremiumActivity.Companion.startActivity
 import com.fastaccess.ui.widgets.AvatarLayout
@@ -99,6 +100,7 @@ class GistActivity : BaseActivity<GistMvp.View, GistPresenter>(), GistMvp.View {
     private var accentColor = 0
     private var iconColor = 0
     private var commentEditorFragment: CommentEditorFragment? = null
+
     @OnClick(R.id.detailsIcon)
     fun onTitleClick() {
         if (presenter!!.gist != null && !isEmpty(presenter!!.gist!!.description)) newInstance(
@@ -137,10 +139,16 @@ class GistActivity : BaseActivity<GistMvp.View, GistPresenter>(), GistMvp.View {
         }
     }
 
+    private val launcher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult(),
+    ) {
+        presenter!!.callApi()
+    }
+
     @OnClick(R.id.edit)
     fun onEdit() {
         if (isProEnabled || isAllFeaturesUnlocked) {
-            if (presenter!!.gist != null) start(this, presenter!!.gist!!)
+            if (presenter!!.gist != null) launcher(this, launcher, presenter!!.gist!!)
         } else {
             startActivity(this)
         }
@@ -199,7 +207,10 @@ class GistActivity : BaseActivity<GistMvp.View, GistPresenter>(), GistMvp.View {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.share -> {
-                if (presenter!!.gist != null) ActivityHelper.shareUrl(this, presenter!!.gist!!.htmlUrl)
+                if (presenter!!.gist != null) ActivityHelper.shareUrl(
+                    this,
+                    presenter!!.gist!!.htmlUrl
+                )
                 return true
             }
             R.id.deleteGist -> {
@@ -232,15 +243,6 @@ class GistActivity : BaseActivity<GistMvp.View, GistPresenter>(), GistMvp.View {
             val isDelete = bundle.getBoolean(BundleConstant.EXTRA) && isOk
             if (isDelete) {
                 presenter!!.onDeleteGist()
-            }
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == RESULT_OK) {
-            if (requestCode == BundleConstant.REQUEST_CODE) {
-                presenter!!.callApi()
             }
         }
     }

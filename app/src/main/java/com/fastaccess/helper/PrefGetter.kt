@@ -553,7 +553,7 @@ object PrefGetter {
 
     @JvmStatic
     val isAutoImageDisabled: Boolean
-        get() = PrefHelper.getBoolean(DISABLE_AUTO_LOAD_IMAGE) && AppHelper.isDataPlan()
+        get() = PrefHelper.getBoolean(DISABLE_AUTO_LOAD_IMAGE) && AppHelper.isDataPlan
 
     @JvmStatic
     val isAppAnimationDisabled: Boolean

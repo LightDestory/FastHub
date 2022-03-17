@@ -26,7 +26,7 @@ open class BasePresenter<V : FAView> : TiPresenter<V>(), FAPresenter {
     private var apiCalled = false
     private val subscriptionHandler = RxTiPresenterDisposableHandler(this)
     override fun manageDisposable(vararg disposables: Disposable?) {
-        subscriptionHandler.manageDisposables(*disposables)
+        subscriptionHandler.manageDisposables(*disposables.filterNotNull().toTypedArray())
     }
     override fun <T> manageObservable(observable: Observable<T>?) {
         manageObservable(observable) {}
