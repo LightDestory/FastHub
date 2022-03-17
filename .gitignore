@@ -4,9 +4,7 @@
 .DS_Store
 /build
 /.idea/
-/app/google-services.json
 /app/build/
 /app/debug/
-/app/src/main/res/values/secrets.xml
-/app/fastaccess-key
-/changelog_generator
+/app/secrets.properties
+/app/keys_release.jks

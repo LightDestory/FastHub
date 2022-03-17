@@ -25,12 +25,6 @@ public class LoginChooserActivityTest {
 
     @Rule public IntentsTestRule<LoginChooserActivity> intentTestRule = new IntentsTestRule<>(LoginChooserActivity.class);
 
-    @Test public void basicAuthButtonTest() {
-        onView(withId(R.id.basicAuth)).perform(click());
-        intended(hasComponent(LoginActivity.class.getName()));
-        onView(withId(R.id.password)).check(matches(textInputLayoutHasHint(intentTestRule.getActivity().getString(R.string.password))));
-    }
-
     @Test public void accessTokenButtonTest() {
         onView(withId(R.id.accessToken)).perform(click());
         intended(hasComponent(LoginActivity.class.getName()));
