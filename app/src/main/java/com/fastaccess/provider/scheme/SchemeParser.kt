@@ -55,11 +55,12 @@ object SchemeParser {
     @JvmOverloads
     fun launchUri(
         context: Context,
-        data: Uri,
+        uri: Uri,
         showRepoBtn: Boolean = false,
         newDocument: Boolean = false
     ) {
-        Logger.e(data)
+        Logger.e(uri)
+        val data: Uri = LinkParserHelper.parseReferenceSymbols(uri)
         val intent = convert(context, data, showRepoBtn)
         if (intent != null) {
             intent.putExtra(BundleConstant.SCHEME_URL, data.toString())

@@ -30,6 +30,10 @@ object LinkParserHelper {
         "contact", "about", "logos", "login", "pricing", ""
     )
 
+    val escapeSymbols: Map<String, String> = mapOf(
+        "&quot;" to "\"", "&apos;" to "'",
+        "&lt;" to "<", "&gt;" to ">", "&amp;" to "&")
+
     @JvmStatic
     @SafeVarargs
     fun <T> returnNonNull(vararg t: T): Optional<T> {
@@ -157,5 +161,24 @@ object LinkParserHelper {
             }
         }
         return gistId
+    }
+
+    @JvmStatic
+    fun isGitHubBlobImage(url: String): Boolean {
+        return Uri.parse(url).authority == HOST_DEFAULT && url.contains("/blob/")
+    }
+
+    @JvmStatic
+    fun minifyGitHubImageUri(url: String): String {
+        return url.replace(HOST_DEFAULT, RAW_AUTHORITY).replace("blob/", "")
+    }
+
+    @JvmStatic
+    fun parseReferenceSymbols(uri: Uri): Uri {
+        var formattedUrl = uri.toString()
+        escapeSymbols.entries.forEach {
+            formattedUrl = formattedUrl.replace(it.key, it.value)
+        }
+        return Uri.parse(formattedUrl)
     }
 }
