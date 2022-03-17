@@ -22,7 +22,7 @@ import java.util.ArrayList;
  * Created by Kosh on 03 Dec 2016, 3:48 PM
  */
 
-class RepoPullRequestPresenter extends BasePresenter<RepoPullRequestMvp.View> implements RepoPullRequestMvp.Presenter {
+public class RepoPullRequestPresenter extends BasePresenter<RepoPullRequestMvp.View> implements RepoPullRequestMvp.Presenter {
 
     @com.evernote.android.state.State String login;
     @com.evernote.android.state.State String repoId;

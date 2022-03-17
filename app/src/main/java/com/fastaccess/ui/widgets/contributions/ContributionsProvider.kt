@@ -1,10 +1,6 @@
 package com.fastaccess.ui.widgets.contributions
 
 import com.fastaccess.helper.InputHelper.isEmpty
-import com.fastaccess.ui.widgets.contributions.ContributionsDay
-import com.fastaccess.helper.InputHelper
-import com.fastaccess.ui.widgets.contributions.ContributionsProvider
-import java.util.ArrayList
 
 /**
  * Copyright 2016 Javier González

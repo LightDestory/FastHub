@@ -24,7 +24,7 @@ import net.grandcentrix.thirtyinch.TiFragment
  * Created by Kosh on 27 May 2016, 7:54 PM
  */
 abstract class BaseFragment<V : FAView, P : BasePresenter<V>> : TiFragment<P, V>(), FAView {
-    protected var callback: FAView? = null
+    protected open var callback: FAView? = null
     private var unbinder: Unbinder? = null
     private var compositeDisposable: CompositeDisposable? = CompositeDisposable()
 

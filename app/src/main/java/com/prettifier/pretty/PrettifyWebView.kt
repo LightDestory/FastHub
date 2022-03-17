@@ -222,6 +222,10 @@ class PrettifyWebView : NestedWebView {
         }
     }
 
+    fun scrollToHash(hash: String) {
+        this.loadUrl("javascript:scrollTo(\"${hash}\");")
+    }
+
     fun setGithubContentWithReplace(
         source: String,
         baseUrl: String?,

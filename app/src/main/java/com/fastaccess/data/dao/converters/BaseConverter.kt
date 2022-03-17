@@ -8,6 +8,8 @@ import io.requery.Converter
  */
 abstract class BaseConverter<C> : Converter<C, String> {
     protected abstract val typeClass: Class<out C>
+
+    @Suppress("UNCHECKED_CAST")
     override fun getMappedType(): Class<C> {
         return typeClass as Class<C>
     }

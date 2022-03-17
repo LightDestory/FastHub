@@ -52,9 +52,9 @@ class CommitThreadViewHolder private constructor(
     }
 
     @SuppressLint("SetTextI18n")
-    override fun bind(model: TimelineModel) {
-        val t = model.commit
-        t?.let { it ->
+    override fun bind(t: TimelineModel) {
+        val model = t.commit
+        model?.let { it ->
             val builder = SpannableBuilder.builder()
             pathText.text =
                 builder.append("${if (!it.login.isNullOrBlank()) it.login else ""} commented on")

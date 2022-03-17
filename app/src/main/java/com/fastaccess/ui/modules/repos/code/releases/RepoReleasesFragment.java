@@ -1,18 +1,18 @@
 package com.fastaccess.ui.modules.repos.code.releases;
 
 import android.os.Bundle;
+import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import android.view.View;
 
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 import com.fastaccess.R;
 import com.fastaccess.data.dao.SimpleUrlsModel;
 import com.fastaccess.data.dao.model.Release;
-import com.fastaccess.helper.ActivityHelper;
 import com.fastaccess.helper.BundleConstant;
 import com.fastaccess.helper.Bundler;
 import com.fastaccess.helper.InputHelper;
@@ -37,10 +37,14 @@ import butterknife.BindView;
  */
 
 public class RepoReleasesFragment extends BaseFragment<RepoReleasesMvp.View, RepoReleasesPresenter> implements RepoReleasesMvp.View {
-    @BindView(R.id.recycler) DynamicRecyclerView recycler;
-    @BindView(R.id.refresh) SwipeRefreshLayout refresh;
-    @BindView(R.id.stateLayout) StateLayout stateLayout;
-    @BindView(R.id.fastScroller) RecyclerViewFastScroller fastScroller;
+    @BindView(R.id.recycler)
+    DynamicRecyclerView recycler;
+    @BindView(R.id.refresh)
+    SwipeRefreshLayout refresh;
+    @BindView(R.id.stateLayout)
+    StateLayout stateLayout;
+    @BindView(R.id.fastScroller)
+    RecyclerViewFastScroller fastScroller;
     private OnLoadMore onLoadMore;
     private ReleasesAdapter adapter;
 
@@ -64,7 +68,8 @@ public class RepoReleasesFragment extends BaseFragment<RepoReleasesMvp.View, Rep
         return view;
     }
 
-    @Override public void onNotifyAdapter(@Nullable List<Release> items, int page) {
+    @Override
+    public void onNotifyAdapter(@Nullable List<Release> items, int page) {
         hideProgress();
         if (items == null || items.isEmpty()) {
             adapter.clear();
@@ -77,11 +82,13 @@ public class RepoReleasesFragment extends BaseFragment<RepoReleasesMvp.View, Rep
         }
     }
 
-    @Override protected int fragmentLayout() {
+    @Override
+    protected int fragmentLayout() {
         return R.layout.small_grid_refresh_list;
     }
 
-    @Override protected void onFragmentCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    protected void onFragmentCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         if (getArguments() == null) {
             throw new NullPointerException("Bundle is null, therefore, issues can't be proceeded.");
         }
@@ -103,50 +110,56 @@ public class RepoReleasesFragment extends BaseFragment<RepoReleasesMvp.View, Rep
         fastScroller.attachRecyclerView(recycler);
     }
 
-    @NonNull @Override public RepoReleasesPresenter providePresenter() {
+    @NonNull
+    @Override
+    public RepoReleasesPresenter providePresenter() {
         return new RepoReleasesPresenter();
     }
 
-    @SuppressWarnings("unchecked") @NonNull @Override public OnLoadMore getLoadMore() {
+    @SuppressWarnings("unchecked")
+    @NonNull
+    @Override
+    public OnLoadMore getLoadMore() {
         if (onLoadMore == null) {
             onLoadMore = new OnLoadMore(getPresenter());
         }
         return onLoadMore;
     }
 
-    @Override public void showProgress(@StringRes int resId) {
-
+    @Override
+    public void showProgress(@StringRes int resId) {
         refresh.setRefreshing(true);
-
         stateLayout.showProgress();
     }
 
-    @Override public void hideProgress() {
+    @Override
+    public void hideProgress() {
         refresh.setRefreshing(false);
         stateLayout.hideProgress();
     }
 
-    @Override public void showErrorMessage(@NonNull String message) {
+    @Override
+    public void showErrorMessage(@NonNull String message) {
         showReload();
         super.showErrorMessage(message);
     }
 
-    @Override public void showMessage(int titleRes, int msgRes) {
+    @Override
+    public void showMessage(int titleRes, int msgRes) {
         showReload();
         super.showMessage(titleRes, msgRes);
     }
 
-    @Override public void onDownload(@NonNull Release item) {
+    @Override
+    public void onDownload(@NonNull Release item) {
         ArrayList<SimpleUrlsModel> models = new ArrayList<>();
         if (!InputHelper.isEmpty(item.getZipBallUrl())) {
             String url = item.getZipBallUrl();
-            if (!url.endsWith(".tar.gz")) {
-                url = url + ".tar.gz";
-            }
             models.add(new SimpleUrlsModel(getString(R.string.download_as_zip), url));
         }
         if (!InputHelper.isEmpty(item.getTarballUrl())) {
-            models.add(new SimpleUrlsModel(getString(R.string.download_as_tar), item.getTarballUrl()));
+            String url = item.getTarballUrl();
+            models.add(new SimpleUrlsModel(getString(R.string.download_as_tar), url));
         }
         if (item.getAssets() != null && !item.getAssets().isEmpty()) {
             ArrayList<SimpleUrlsModel> mapped = Stream.of(item.getAssets())
@@ -163,7 +176,8 @@ public class RepoReleasesFragment extends BaseFragment<RepoReleasesMvp.View, Rep
         dialogView.show(getChildFragmentManager(), "ListDialogView");
     }
 
-    @Override public void onShowDetails(@NonNull Release item) {
+    @Override
+    public void onShowDetails(@NonNull Release item) {
         if (!InputHelper.isEmpty(item.getBody())) {
             MessageDialogView.newInstance(!InputHelper.isEmpty(item.getName()) ? item.getName() : item.getTagName(),
                     item.getBody(), true, false).show(getChildFragmentManager(), MessageDialogView.TAG);
@@ -172,21 +186,23 @@ public class RepoReleasesFragment extends BaseFragment<RepoReleasesMvp.View, Rep
         }
     }
 
-    @Override public void onRefresh() {
+    @Override
+    public void onRefresh() {
         getPresenter().onCallApi(1, null);
     }
 
-    @Override public void onClick(View view) {
+    @Override
+    public void onClick(View view) {
         onRefresh();
     }
 
-    @Override public void onItemSelected(SimpleUrlsModel item) {
-        if (ActivityHelper.checkAndRequestReadWritePermission(requireActivity())) {
-            RestProvider.downloadFile(requireContext(), Objects.requireNonNull(item.getUrl()));
-        }
+    @Override
+    public void onItemSelected(SimpleUrlsModel item) {
+        RestProvider.downloadFile(requireContext(), Objects.requireNonNull(item.getUrl()));
     }
 
-    @Override public void onScrollTop(int index) {
+    @Override
+    public void onScrollTop(int index) {
         super.onScrollTop(index);
         if (recycler != null) recycler.scrollToPosition(0);
     }

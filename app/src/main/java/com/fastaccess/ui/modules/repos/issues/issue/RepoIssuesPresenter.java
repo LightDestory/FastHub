@@ -26,7 +26,7 @@ import io.reactivex.Observable;
  * Created by Kosh on 03 Dec 2016, 3:48 PM
  */
 
-class RepoIssuesPresenter extends BasePresenter<RepoIssuesMvp.View> implements RepoIssuesMvp.Presenter {
+public class RepoIssuesPresenter extends BasePresenter<RepoIssuesMvp.View> implements RepoIssuesMvp.Presenter {
 
     private ArrayList<Issue> issues = new ArrayList<>();
     @com.evernote.android.state.State String login;

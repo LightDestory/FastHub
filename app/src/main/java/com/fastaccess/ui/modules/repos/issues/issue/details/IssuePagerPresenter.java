@@ -41,7 +41,7 @@ import retrofit2.Response;
  * Created by Kosh on 10 Dec 2016, 9:23 AM
  */
 
-class IssuePagerPresenter extends BasePresenter<IssuePagerMvp.View> implements IssuePagerMvp.Presenter {
+public class IssuePagerPresenter extends BasePresenter<IssuePagerMvp.View> implements IssuePagerMvp.Presenter {
     @com.evernote.android.state.State Issue issueModel;
     @com.evernote.android.state.State int issueNumber;
     @com.evernote.android.state.State String login;

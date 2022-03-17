@@ -20,8 +20,8 @@ class EditRepoFilePresenter : BasePresenter<EditRepoFileMvp.View>(), EditRepoFil
 
     override fun onInit(intent: Intent?) {
         if (downloadedContent.isNullOrBlank()) {
-            intent?.let {
-                it.extras?.let {
+            intent?.let { intent1 ->
+                intent1.extras?.let {
                     model = it.getParcelable(BundleConstant.ITEM)
                     loadContent()
                 }
@@ -40,30 +40,31 @@ class EditRepoFilePresenter : BasePresenter<EditRepoFileMvp.View>(), EditRepoFil
             it.onSetDescriptionError(description.isNullOrBlank())
         }
         if (!text.isNullOrBlank() && !description.isNullOrBlank() && !filename.isNullOrBlank()) {
-            model?.let {
-                val commitModel = CommitRequestModel(description!!, Base64.encodeToString(text!!.toByteArray(), Base64.DEFAULT), it.sha!!, it.ref)
-                val observable = RestProvider.getContentService(isEnterprise).updateCreateFile(it.login, it.repoId,
-                        if (it.path.isNullOrBlank()) {
-                            filename!!
+            model?.let { editRepoFileModel ->
+                val commitModel = CommitRequestModel(description, Base64.encodeToString(text.toByteArray(), Base64.DEFAULT), editRepoFileModel.sha!!, editRepoFileModel.ref)
+                val observable = RestProvider.getContentService(isEnterprise).updateCreateFile(editRepoFileModel.login, editRepoFileModel.repoId,
+                        if (editRepoFileModel.path.isNullOrBlank()) {
+                            filename
                         } else {
-                            if (it.path!!.endsWith("/")) {
-                                "${it.path}$filename"
+                            if (editRepoFileModel.path.endsWith("/")) {
+                                "${editRepoFileModel.path}$filename"
                             } else {
-                                "${it.path}"
+                                "${editRepoFileModel.path}"
                             }
-                        }, it.ref, commitModel)
-                makeRestCall(observable, { sendToView { it.onSuccessfullyCommitted() } })
+                        }, editRepoFileModel.ref, commitModel)
+                makeRestCall(observable) { sendToView { it.onSuccessfullyCommitted() } }
             }
         }
     }
 
     private fun loadContent() {
-        model?.contentUrl?.let {
+        model?.contentUrl?.let { s ->
             makeRestCall(RestProvider.getRepoService(isEnterprise)
-                    .getFileAsStream(it), {
+                    .getFileAsStream(s)
+            ) {
                 fileContent = it
-                sendToView({ v -> v.onSetText(it) })
-            })
+                sendToView { v -> v.onSetText(it) }
+            }
         }
     }
 }

@@ -19,7 +19,7 @@ import java.util.List;
  * Created by Kosh on 03 Dec 2016, 3:45 PM
  */
 
-interface RepoPullRequestMvp {
+public interface RepoPullRequestMvp {
 
     int PULL_REQUEST_REQUEST_CODE = 1003;
 

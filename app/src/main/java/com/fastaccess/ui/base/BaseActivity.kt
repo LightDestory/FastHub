@@ -11,6 +11,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.DrawableRes
 import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
@@ -21,7 +22,6 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.SimpleDrawerListener
 import androidx.viewpager.widget.ViewPager
 import butterknife.ButterKnife
-import butterknife.internal.DebouncingOnClickListener
 import com.bumptech.glide.Glide
 import com.evernote.android.state.State
 import com.evernote.android.state.StateSaver
@@ -68,19 +68,14 @@ import net.grandcentrix.thirtyinch.TiActivity
  */
 abstract class BaseActivity<V : FAView, P : BasePresenter<V>> : TiActivity<P, V>(), FAView,
     MainDrawerFragment.OnDrawerMenuCreatedListener {
+
     @State
     open var isProgressShowing = false
-
-    @JvmField
-    protected var toolbar: Toolbar? = null
-
-    @JvmField
-    protected var appbar: AppBarLayout? = null
-
-    @JvmField
-    protected var drawer: DrawerLayout? = null
-    private var extraNav: NavigationView? = null
-    var drawerViewPager: ViewPager? = null
+    protected val toolbar: Toolbar? by lazy { window.decorView.findViewById(R.id.toolbar) }
+    protected val appbar: AppBarLayout? by lazy { window.decorView.findViewById(R.id.appbar) }
+    protected val drawer: DrawerLayout? by lazy { window.decorView.findViewById(R.id.drawer) }
+    private val extraNav: NavigationView? by lazy { window.decorView.findViewById(R.id.extrasNav) }
+    val drawerViewPager: ViewPager? by lazy { window.decorView.findViewById(R.id.drawerViewPager) }
 
     @JvmField
     @State
@@ -126,19 +121,9 @@ abstract class BaseActivity<V : FAView, P : BasePresenter<V>> : TiActivity<P, V>
         if (layout() != 0) {
             setContentView(layout())
             ButterKnife.bind(this)
-            val itemView = window.decorView
-            toolbar = itemView.findViewById(R.id.toolbar)
-            appbar = itemView.findViewById(R.id.appbar)
-            drawer = itemView.findViewById(R.id.drawer)
-            extraNav = itemView.findViewById(R.id.extrasNav)
-            drawerViewPager = itemView.findViewById(R.id.drawerViewPager)
-            val view = itemView.findViewById<View>(R.id.logout)
-            val target = this
-            view?.setOnClickListener(object : DebouncingOnClickListener() {
-                override fun doClick(p0: View) {
-                    target.onLogoutClicked()
-                }
-            })
+            window.decorView.findViewById<View>(R.id.logout)?.setOnThrottleClickListener {
+                onLogoutClicked()
+            }
         }
         if (savedInstanceState == null) {
             val now = System.currentTimeMillis() / 1000
@@ -284,20 +269,15 @@ abstract class BaseActivity<V : FAView, P : BasePresenter<V>> : TiActivity<P, V>
         }
     }
 
-    override fun onOpenSettings() {
-        startActivityForResult(
-            Intent(this, SettingsActivity::class.java),
-            BundleConstant.REFRESH_CODE
-        )
+    private val openSettingsLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        onThemeChanged()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == RESULT_OK) {
-            if (requestCode == BundleConstant.REFRESH_CODE) {
-                onThemeChanged()
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, data)
+    override fun onOpenSettings() {
+        val intent = Intent(this, SettingsActivity::class.java)
+        openSettingsLauncher.launch(intent)
     }
 
     override fun onScrollTop(index: Int) {}
@@ -314,7 +294,7 @@ abstract class BaseActivity<V : FAView, P : BasePresenter<V>> : TiActivity<P, V>
         }
     }
 
-    fun onLogoutClicked() {
+    private fun onLogoutClicked() {
         closeDrawer()
         onLogoutPressed()
     }

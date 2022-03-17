@@ -44,7 +44,7 @@ import retrofit2.Response;
  * Created by Kosh on 10 Dec 2016, 9:23 AM
  */
 
-class PullRequestPagerPresenter extends BasePresenter<PullRequestPagerMvp.View> implements PullRequestPagerMvp.Presenter {
+public class PullRequestPagerPresenter extends BasePresenter<PullRequestPagerMvp.View> implements PullRequestPagerMvp.Presenter {
     @com.evernote.android.state.State PullRequest pullRequest;
     @com.evernote.android.state.State int issueNumber;
     @com.evernote.android.state.State String login;

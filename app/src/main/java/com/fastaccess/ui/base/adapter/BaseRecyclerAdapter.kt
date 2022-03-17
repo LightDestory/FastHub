@@ -26,10 +26,13 @@ abstract class BaseRecyclerAdapter<M, VH : BaseViewHolder<M>, P : BaseViewHolder
 //        this.listener = listener
 //    }
 
+
+    @Suppress("UNCHECKED_CAST")
     constructor(list: MutableList<M>) {
         this.data = list as MutableList<M?>
     }
 
+    @Suppress("UNCHECKED_CAST")
     constructor(list: List<M>, listener: P?) {
         this.data = list as MutableList<M?>
         this.listener = listener
@@ -82,6 +85,7 @@ abstract class BaseRecyclerAdapter<M, VH : BaseViewHolder<M>, P : BaseViewHolder
         return data.indexOf(t)
     }
 
+    @Suppress("UNCHECKED_CAST")
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         return if (viewType == PROGRESS_TYPE) {
             addSpanLookup(parent)

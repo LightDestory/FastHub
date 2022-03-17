@@ -32,8 +32,8 @@ class ReviewsViewHolder private constructor(
         itemView.setOnClickListener(null)
     }
 
-    override fun bind(model: TimelineModel) {
-        val review = model.review
+    override fun bind(t: TimelineModel) {
+        val review = t.review
         review?.let {
             stateImage.setImageResource(R.drawable.ic_eye)
             avatarLayout.setUrl(it.user?.avatarUrl, it.user?.login, false, false)

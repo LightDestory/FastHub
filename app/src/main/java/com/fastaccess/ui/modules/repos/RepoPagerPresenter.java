@@ -30,7 +30,7 @@ import static com.fastaccess.helper.ActivityHelper.getVisibleFragment;
  * Created by Kosh on 09 Dec 2016, 4:17 PM
  */
 
-class RepoPagerPresenter extends BasePresenter<RepoPagerMvp.View> implements RepoPagerMvp.Presenter {
+public class RepoPagerPresenter extends BasePresenter<RepoPagerMvp.View> implements RepoPagerMvp.Presenter {
     @com.evernote.android.state.State boolean isWatched;
     @com.evernote.android.state.State boolean isStarred;
     @com.evernote.android.state.State boolean isForked;
