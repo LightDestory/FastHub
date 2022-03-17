@@ -203,7 +203,7 @@ class CreateIssuePresenter : BasePresenter<CreateIssueMvp.View>(), CreateIssueMv
 
     override fun onCheckAppVersion() {
         makeRestCall(
-            getRepoService(false).getLatestRelease("k0shk0sh", "FastHub"),
+            getRepoService(false).getLatestRelease("LightDestory", "FastHub-RE"),
             { release: Release? ->
                 if (release != null) {
                     if (!BuildConfig.VERSION_NAME.contains(release.tagName)) {

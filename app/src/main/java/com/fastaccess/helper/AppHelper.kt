@@ -23,8 +23,6 @@ import com.fastaccess.helper.InputHelper.isEmpty
 import com.fastaccess.helper.PrefGetter.ThemeType
 import com.fastaccess.helper.PrefGetter.getAppLanguage
 import com.fastaccess.helper.PrefGetter.getThemeType
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.GoogleApiAvailability
 import es.dmoral.toasty.Toasty
 import java.util.*
 
@@ -76,7 +74,7 @@ object AppHelper {
         val brand = if (!isEmulator) Build.BRAND else "Android Emulator"
         val model = if (!isEmulator) DeviceNameGetter.instance.deviceName else "Android Emulator"
         val builder = StringBuilder()
-            .append("**FastHub Version: ").append(BuildConfig.VERSION_NAME)
+            .append("**FastHub-RE Version: ").append(BuildConfig.VERSION_NAME)
             .append(if (enterprise) " Enterprise**" else "**").append("  \n")
             .append(if (!isInstalledFromPlaySore(App.getInstance())) "**APK Source: Unknown**  \n" else "")
             .append("**Android Version: ").append(Build.VERSION.RELEASE.toString())
@@ -175,6 +173,7 @@ object AppHelper {
     }
 
     fun isGoogleAvailable(context: Context): Boolean {
+        /*
         var applicationInfo: ApplicationInfo? = null
         try {
             applicationInfo = context.packageManager.getApplicationInfo("com.google.android.gms", 0)
@@ -183,6 +182,8 @@ object AppHelper {
         }
         return applicationInfo != null && applicationInfo.enabled && GoogleApiAvailability.getInstance()
             .isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS
+         */
+        return true
     }
 
     @JvmStatic

@@ -1,5 +1,6 @@
 package com.fastaccess.provider.tasks.git
 
+import android.app.IntentService
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
@@ -12,12 +13,11 @@ import com.fastaccess.helper.Bundler.Companion.start
 import com.fastaccess.helper.InputHelper.isEmpty
 import com.fastaccess.helper.RxHelper.safeObservable
 import com.fastaccess.provider.rest.RestProvider.getReactionsService
-import com.google.firebase.messaging.EnhancedIntentService
 
 /**
  * Created by Kosh on 29 Mar 2017, 9:59 PM
  */
-class ReactionService : EnhancedIntentService() {
+class ReactionService : IntentService("ReactionService") {
     private var notification: NotificationCompat.Builder? = null
     private var notificationManager: NotificationManager? = null
         get() {
@@ -27,7 +27,7 @@ class ReactionService : EnhancedIntentService() {
             return field
         }
 
-    fun onHandleIntent(intent: Intent?) {
+    override fun onHandleIntent(intent: Intent?) {
         if (intent != null && intent.extras != null) {
             val bundle = intent.extras
             val reactionType = bundle!!.getSerializable(BundleConstant.EXTRA_TYPE) as ReactionTypes?
@@ -151,7 +151,7 @@ class ReactionService : EnhancedIntentService() {
         }
     }
 
-    override fun handleIntent(p0: Intent) {
+    fun handleIntent(p0: Intent) {
         onHandleIntent(p0)
     }
 }

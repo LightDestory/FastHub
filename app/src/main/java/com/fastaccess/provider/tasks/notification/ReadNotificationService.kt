@@ -1,5 +1,6 @@
 package com.fastaccess.provider.tasks.notification
 
+import android.app.IntentService
 import android.app.Notification
 import android.app.NotificationManager
 import android.content.Context
@@ -16,14 +17,13 @@ import com.fastaccess.helper.PrefGetter.isEnterprise
 import com.fastaccess.helper.PrefGetter.isMarkAsReadEnabled
 import com.fastaccess.provider.rest.RestProvider.getNotificationService
 import com.fastaccess.provider.scheme.SchemeParser.launchUri
-import com.google.firebase.messaging.EnhancedIntentService
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 
 /**
  * Created by Kosh on 11 Mar 2017, 12:13 AM
  */
-class ReadNotificationService : EnhancedIntentService() {
+class ReadNotificationService : IntentService("ReadNotificationService") {
     private var notification: NotificationCompat.Builder? = null
         get() {
             if (field == null) {
@@ -40,11 +40,11 @@ class ReadNotificationService : EnhancedIntentService() {
         notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
     }
 
-    override fun handleIntent(p0: Intent) {
+    fun handleIntent(p0: Intent) {
         onHandleIntent(p0)
     }
 
-    fun onHandleIntent(intent: Intent?) {
+    override fun onHandleIntent(intent: Intent?) {
         if (intent != null && intent.extras != null) {
             val bundle = intent.extras
             when (bundle!!.getInt(BundleConstant.EXTRA_TYPE)) {

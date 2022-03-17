@@ -38,7 +38,7 @@ import java.util.*
 class EditorActivity : BaseActivity<EditorMvp.View, EditorPresenter>(), EditorMvp.View {
     private var participants: ArrayList<String>? = null
     private val sentFromFastHub: String by lazy {
-        "\n\n_" + getString(R.string.sent_from_fasthub, AppHelper.getDeviceName(), "",
+        "\n\n_" + getString(R.string.sent_from_fasthub, AppHelper.deviceName, "",
                 "[" + getString(R.string.app_name) + "](https://github.com/LightDestory/FastHub-RE/") + "_"
     }
 

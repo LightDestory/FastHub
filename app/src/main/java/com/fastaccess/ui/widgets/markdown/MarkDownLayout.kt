@@ -28,7 +28,7 @@ import com.fastaccess.ui.modules.editor.popup.EditorLinkImageDialogFragment
 class MarkDownLayout : LinearLayout {
 
     private val sentFromFastHub: String by lazy {
-        "\n\n_" + resources.getString(R.string.sent_from_fasthub, AppHelper.getDeviceName(), "",
+        "\n\n_" + resources.getString(R.string.sent_from_fasthub, AppHelper.deviceName, "",
                 "[" + resources.getString(R.string.app_name) + "](https://github.com/LightDestory/FastHub-RE/)") + "_"
     }
 
