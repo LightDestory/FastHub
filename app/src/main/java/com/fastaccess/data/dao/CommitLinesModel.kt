@@ -74,7 +74,7 @@ class CommitLinesModel : Parcelable {
                     var position = 0
                     for (_token in split) {
                         var token = _token
-                        val firstChar = token[0]
+                        val firstChar = if (token.isEmpty()) "" else token[0]
                         var addLeft = false
                         var addRight = false
                         var color = TRANSPARENT

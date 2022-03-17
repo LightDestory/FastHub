@@ -29,9 +29,8 @@
         <item name="android:windowBackground">@color/lightWindowBackground</item>
         <item name="colorPrimary">@color/light_primary</item>
         <item name="colorPrimaryDark">@color/light_primary_dark</item>
-        <item name="colorSecondary">@color/light_accent</item>
         <item name="colorAccent">@color/light_accent</item>
-<item name="colorSecondary">@color/light_accent</item>
+        <item name="colorSecondary">@color/light_accent</item>
         <item name="colorControlNormal">?colorAccent</item>
         <item name="actionModeBackground">?colorPrimary</item>
         <item name="windowActionModeOverlay">true</item>

@@ -80,7 +80,7 @@ object RestProvider {
 
     @JvmStatic
     fun downloadFile(context: Context, url: String) {
-        downloadFile(context, url)
+        downloadFile(context, url, null)
     }
 
     @JvmStatic

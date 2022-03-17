@@ -8,14 +8,14 @@ import java.util.ArrayList
 /**
  * Created by Kosh on 19 Feb 2017, 12:13 PM
  */
-class CreateIssueModel : Parcelable {
+open class CreateIssueModel : Parcelable {
     var title: String? = null
     var body: String? = null
     var labels: ArrayList<String>? = null
     var assignees: ArrayList<String>? = null
     var milestone: Long? = null
 
-    constructor() {}
+    constructor()
 
     override fun describeContents(): Int {
         return 0

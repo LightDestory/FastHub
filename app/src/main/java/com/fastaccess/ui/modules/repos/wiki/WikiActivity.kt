@@ -3,50 +3,76 @@ package com.fastaccess.ui.modules.repos.wiki
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources.Theme
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
-import com.google.android.material.navigation.NavigationView
-import androidx.drawerlayout.widget.DrawerLayout
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.AbsoluteSizeSpan
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ProgressBar
-import butterknife.BindView
+import androidx.core.view.iterator
+import androidx.drawerlayout.widget.DrawerLayout
 import com.evernote.android.state.State
 import com.fastaccess.R
 import com.fastaccess.data.dao.NameParser
 import com.fastaccess.data.dao.wiki.WikiContentModel
+import com.fastaccess.data.dao.wiki.WikiSideBarModel
+import com.fastaccess.databinding.WikiActivityLayoutBinding
 import com.fastaccess.helper.ActivityHelper
 import com.fastaccess.helper.BundleConstant
 import com.fastaccess.helper.Bundler
 import com.fastaccess.provider.scheme.LinkParserHelper
 import com.fastaccess.ui.base.BaseActivity
+import com.fastaccess.ui.delegate.viewBinding
 import com.fastaccess.ui.modules.repos.RepoPagerActivity
 import com.fastaccess.ui.widgets.StateLayout
+import com.google.android.material.navigation.NavigationView
 import com.prettifier.pretty.PrettifyWebView
-import java.util.*
+
 
 /**
  * Created by Kosh on 13 Jun 2017, 8:35 PM
  */
 class WikiActivity : BaseActivity<WikiMvp.View, WikiPresenter>(), WikiMvp.View {
+    val binding: WikiActivityLayoutBinding by viewBinding()
 
-    @BindView(R.id.wikiSidebar)
-    lateinit var navMenu: NavigationView
-    @BindView(R.id.drawer)
-    lateinit var drawerLayout: DrawerLayout
-    @BindView(R.id.progress)
-    lateinit var progressbar: ProgressBar
-    @BindView(R.id.stateLayout)
-    lateinit var stateLayout: StateLayout
-    @BindView(R.id.webView)
-    lateinit var webView: PrettifyWebView
+    private val navMenu: NavigationView by lazy { window.decorView.findViewById(R.id.wikiSidebar) }
+    val drawerLayout: DrawerLayout by lazy { window.decorView.findViewById(R.id.drawer) }
+    val progressbar: ProgressBar by lazy { window.decorView.findViewById(R.id.progress) }
+    val stateLayout: StateLayout by lazy { window.decorView.findViewById(R.id.stateLayout) }
+    val webView: PrettifyWebView by lazy { window.decorView.findViewById(R.id.webView) }
+
+    //    @BindView(R.id.wikiSidebar)
+//    lateinit var navMenu: NavigationView
+//    val webView: PrettifyWebView by lazy { binding.webView }
+//    @BindView(R.id.drawer)
+//    lateinit var drawerLayout: DrawerLayout
+
+//    @BindView(R.id.progress)
+//    lateinit var progressbar: ProgressBar
+
+//    @BindView(R.id.stateLayout)
+//    lateinit var stateLayout: StateLayout
+//
+//    @BindView(R.id.webView)
+//    lateinit var webView: PrettifyWebView
 
     @State
     var wiki = WikiContentModel(null, null, arrayListOf())
+
     @State
     var selectedTitle: String = "Home"
+
+    @State
+    var selectedId: Int = selectedTitle.hashCode()
 
     override fun layout(): Int = R.layout.wiki_activity_layout
 
@@ -74,16 +100,58 @@ class WikiActivity : BaseActivity<WikiMvp.View, WikiPresenter>(), WikiMvp.View {
 
     override fun onSetPage(page: String) {
         selectedTitle = page
+        selectedId = page.hashCode()
+    }
+
+    @SuppressLint("ResourceType")
+    private fun toSequence(sideBar: WikiSideBarModel): CharSequence {
+        val sb = SpannableStringBuilder()
+        var title = sideBar.title
+        if (sideBar.level == 2) {
+            title = "  $title"
+        }
+        val len = title.length
+        sb.append(title)
+        when (sideBar.level) {
+            0 -> {
+                val styleSpan = StyleSpan(Typeface.BOLD)
+                val absoluteSizeSpan = AbsoluteSizeSpan(14, true)
+                sb.setSpan(styleSpan, 0, len, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
+                sb.setSpan(absoluteSizeSpan, 0, len, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
+            }
+            1 -> {
+                val absoluteSizeSpan = AbsoluteSizeSpan(12, true)
+                sb.setSpan(absoluteSizeSpan, 0, len, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
+            }
+            2 -> {
+                val typedValue = TypedValue()
+                val theme: Theme = this.theme
+                theme.resolveAttribute(android.R.attr.textColorSecondary, typedValue, true)
+                val color = typedValue.data
+                val colorSpan = ForegroundColorSpan(
+                    color
+                )
+                sb.setSpan(colorSpan, 0, len, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
+                val absoluteSizeSpan = AbsoluteSizeSpan(12, true)
+                sb.setSpan(absoluteSizeSpan, 0, len, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
+            }
+            else -> {}
+        }
+        return sb
     }
 
     private fun loadMenu() {
         navMenu.menu.clear()
         wiki.sidebar.onEach {
-            navMenu.menu.add(R.id.languageGroup, it.title?.hashCode()!!, Menu.NONE, it.title)
-                .setCheckable(true)
-                .isChecked = it.title.lowercase(Locale.getDefault()) == selectedTitle.lowercase(
-                Locale.getDefault()
+            navMenu.menu.add(
+                R.id.languageGroup,
+                it.title.hashCode(),
+                Menu.NONE,
+                // Todo 不同的样式
+                toSequence(it)
             )
+                .setCheckable(true)
+                .isChecked = it.id == selectedId
         }
     }
 
@@ -93,6 +161,8 @@ class WikiActivity : BaseActivity<WikiMvp.View, WikiPresenter>(), WikiMvp.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+//        this.navMenu = window.decorView.findViewById(R.id.wikiSidebar)
+//        this.stateLayout = window.decorView.findViewById(R.id.stateLayout)
         if (savedInstanceState != null) {
             onLoadContent(wiki)
         } else {
@@ -108,18 +178,43 @@ class WikiActivity : BaseActivity<WikiMvp.View, WikiPresenter>(), WikiMvp.View {
     }
 
     override fun showPrivateRepoError() {
-        onLoadContent(WikiContentModel("<h3>${getString(R.string.private_wiki_error_msg)}</h3>", null, listOf()))
+        onLoadContent(
+            WikiContentModel(
+                "<h3>${getString(R.string.private_wiki_error_msg)}</h3>",
+                null,
+                listOf()
+            )
+        )
     }
 
     private fun onSidebarClicked(item: MenuItem) {
-        this.selectedTitle = item.title.toString()
-        setTaskName("${presenter.login}/${presenter.repoId} - Wiki - $selectedTitle")
         closeDrawerLayout()
-        wiki.sidebar.first {
-            it.title?.lowercase(Locale.getDefault()) == item.title.toString()
-                .lowercase(Locale.getDefault())
+        val selectItem =
+            wiki.sidebar.firstOrNull { it.id == this.selectedId }
+        val nextSelectItem =
+            wiki.sidebar.firstOrNull { it.id == item.itemId }
+        if (selectItem == nextSelectItem) {
+            return
         }
-            .let { presenter.onSidebarClicked(it) }
+        nextSelectItem?.let {
+            if (selectItem != null) {
+                if (selectItem.link == nextSelectItem.link) {
+                    if (nextSelectItem.hash != null && nextSelectItem.hash != selectItem.hash) {
+                        webView.scrollToHash(nextSelectItem.hash!!)
+                        for (menu in navMenu.menu.iterator()) {
+                            menu.isChecked = menu.itemId == nextSelectItem.id
+                        }
+                    }
+                } else {
+                    presenter.onSidebarClicked(it)
+                }
+            } else {
+                presenter.onSidebarClicked(it)
+            }
+            this.selectedTitle = item.title.toString()
+            this.selectedId = item.itemId
+            setTaskName("${presenter.login}/${presenter.repoId} - Wiki - ${this.selectedTitle}")
+        }
     }
 
     @SuppressLint("RtlHardcoded")

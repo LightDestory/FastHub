@@ -41,6 +41,7 @@ class SettingsDataStore(val mmkv: MMKV) : PreferenceDataStore() {
         return map
     }
 
+    @Suppress("UNCHECKED_CAST")
     fun putAny(key: String, value: Any?) {
         when (value) {
             is String -> putString(key, value)

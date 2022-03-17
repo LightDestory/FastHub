@@ -19,7 +19,7 @@ import java.util.List;
  * Created by Kosh on 03 Dec 2016, 3:45 PM
  */
 
-interface RepoIssuesMvp {
+public interface RepoIssuesMvp {
 
     int ISSUE_REQUEST_CODE = 1002;
 

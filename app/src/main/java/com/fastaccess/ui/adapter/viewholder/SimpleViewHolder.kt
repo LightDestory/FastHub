@@ -15,7 +15,7 @@ class SimpleViewHolder<O>(
 ) :
     BaseViewHolder<O>(itemView, adapter) {
     val title: FontTextView = itemView.findViewById(R.id.title)
-    override fun bind(o: O) {
-        title.text = o.toString()
+    override fun bind(t: O) {
+        title.text = t.toString()
     }
 }

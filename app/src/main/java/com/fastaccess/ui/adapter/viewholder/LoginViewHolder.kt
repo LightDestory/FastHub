@@ -22,13 +22,13 @@ class LoginViewHolder private constructor(itemView: View, adapter: BaseRecyclerA
     val title: FontTextView by lazy { itemView.findViewById(R.id.title) }
 
     @SuppressLint("SetTextI18n")
-    override fun bind(login: Login) {
-        avatarLayout?.setUrl(login.avatarUrl, null, false, false)
-        title.text = if (login.isIsEnterprise) {
-            val uri: String? = Uri.parse(login.enterpriseUrl).authority
-            "${login.login} ${if (uri.isNullOrBlank()) login.enterpriseUrl else uri}"
+    override fun bind(t: Login) {
+        avatarLayout?.setUrl(t.avatarUrl, null, false, false)
+        title.text = if (t.isIsEnterprise) {
+            val uri: String? = Uri.parse(t.enterpriseUrl).authority
+            "${t.login} ${if (uri.isNullOrBlank()) t.enterpriseUrl else uri}"
         } else {
-            login.login
+            t.login
         }
     }
 
