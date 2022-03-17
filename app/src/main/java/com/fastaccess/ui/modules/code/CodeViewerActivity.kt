@@ -15,6 +15,7 @@ import com.fastaccess.helper.BundleConstant
 import com.fastaccess.helper.Bundler
 import com.fastaccess.helper.InputHelper.isEmpty
 import com.fastaccess.provider.rest.RestProvider
+import com.fastaccess.provider.scheme.LinkParserHelper
 import com.fastaccess.provider.scheme.LinkParserHelper.getEnterpriseGistUrl
 import com.fastaccess.provider.scheme.LinkParserHelper.getGistId
 import com.fastaccess.provider.scheme.LinkParserHelper.isEnterprise
@@ -145,6 +146,9 @@ class CodeViewerActivity : BaseActivity<BaseMvp.FAView, BasePresenter<BaseMvp.FA
         fun createIntent(context: Context, url: String, htmlUrl: String): Intent {
             var url1 = url
             val intent = Intent(context, CodeViewerActivity::class.java)
+            if (LinkParserHelper.isGitHubBlobImage(url1)){
+                url1 = LinkParserHelper.minifyGitHubImageUri(url1)
+            }
             val isEnterprise = isEnterprise(htmlUrl)
             url1 = getEnterpriseGistUrl(url1, isEnterprise)
             intent.putExtras(
