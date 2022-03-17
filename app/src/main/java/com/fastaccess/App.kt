@@ -11,9 +11,7 @@ import com.fastaccess.helper.SettingsDataStore
 import com.fastaccess.helper.TypeFaceHelper.generateTypeface
 import com.fastaccess.provider.colors.ColorsProvider
 import com.fastaccess.provider.emoji.EmojiManager
-import com.google.firebase.messaging.FirebaseMessaging
-import com.miguelbcr.io.rx_billing_service.RxBillingService
-import com.tencent.bugly.crashreport.CrashReport
+import com.fastaccess.provider.tasks.notification.NotificationSchedulerJobTask
 import es.dmoral.toasty.Toasty
 import io.requery.Persistable
 import io.requery.android.sqlite.DatabaseSource
@@ -43,7 +41,6 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        CrashReport.initCrashReport(applicationContext, "ae44f59ed7", BuildConfig.DEBUG)
         instance = this
         init()
     }
@@ -57,12 +54,11 @@ class App : Application() {
     }
 
     private fun init() {
-        RxBillingService.register(this)
         deleteDatabase("database.db")
         dataStore
         setupPreference()
         generateTypeface(this)
-        //        NotificationSchedulerJobTask.scheduleJob(this);
+        NotificationSchedulerJobTask.scheduleJob(this);
         if (BuildConfig.DEBUG) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
                 initShortcut()
@@ -71,10 +67,6 @@ class App : Application() {
         EmojiManager.load()
         ColorsProvider.load()
         DeviceNameGetter.instance.loadDevice()
-        try {
-            FirebaseMessaging.getInstance().subscribeToTopic("FastHub")
-        } catch (ignored: Exception) {
-        }
         Toasty.Config.getInstance().allowQueue(true).apply()
     }
 
