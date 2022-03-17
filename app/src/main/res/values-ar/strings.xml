@@ -228,7 +228,6 @@
     <string name="turn_off">إيقاف</string>
     <string name="unauthorized_user">مستخدم غير مرخص</string>
     <string name="two_factors_otp_error">مطلوب توثيق ثنائي</string>
-    <string name="no_issue">لا توجد علل</string>
     <string name="copy">نسخ</string>
     <string name="success_copied">تم النسخ</string>
     <string name="commit_message">رسالة التسليم</string>
@@ -266,11 +265,7 @@
     <string name="no_commits">لا تسليمات</string>
     <string name="no_contributors">لا مساهمون</string>
     <string name="no_releases">لا توجد إصدارات</string>
-    <string name="no_closed_issues">لا توجد علل مغلقة</string>
-    <string name="no_opened_issues">لا توجد علل مفتوحة</string>
     <string name="no_events">لا توجد أحداث</string>
-    <string name="no_open_pull_requests">لا توجد طلبات سحب مفتوحة</string>
-    <string name="no_closed_pull_request">لا توجد طلبات سحب مغلقة</string>
     <string name="no_search_results">لا توجد نتائج بحث</string>
     <string name="read_write_permission_explanation">من فضلك وافق على إعطاء الصلاحيات من أجل تمكين التطبيق من حفظ الملفات على ذاكرة الجهاز حتى تتمكن من مشاهدتهم</string>
     <string name="public_gists">مقالات عامة</string>
@@ -370,10 +365,7 @@
     <string name="enable_signature_box_summary">تفعيل مربع التوقيع بهدف تسهيل تفعيل/إلغاء تفعيل التوقيع</string>
     <string name="tags">الإشارات</string>
     <string name="add_comment">إضافة تعليق</string>
-    <string name="banners">تقديم اللافتات</string>
-    <string name="banners_info">مع فاست هَب 2.5.0, تستطيع تمييز نفسك بشكل أفضل عن طريق اللافتات في صفحتك الشخصية .\n\nأي شخص يستخدم فاست هَب سوف يرى اللافتة, وأنت ستستطيع رؤية لافتات الآخرين أيضا!إذا أردت صنع واحدة،اجعلها بمقاس 1280x384 أو مقسومه،وإلا سيتم اقتصاص الصورة.\n\nتستطيع إضافة وتعديل لافتتك في أي وقت، عن طريق إنشاء مقالة باسم "header.fst" مع ملف يحتوي على رابط مباشر للصورة.\n\nأو ببساطة ، استخدم رافع الصور!
-    </string>
-    <string name="edit_banner">اختر لافتة</string>
+
     <string name="image_error">تعذر فتح الصورة ، حاول مرة أخرى.</string>
     <string name="trending">الشائع</string>
     <string name="not_really_working">الفرز بواسطة الوجوه التعبيرية لا يعمل بسبب قيود جيت هَب</string>
