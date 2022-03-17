@@ -17,23 +17,15 @@ import androidx.core.content.ContextCompat
 import com.fastaccess.helper.ActivityHelper
 import com.fastaccess.ui.modules.repos.RepoPagerActivity
 import com.danielstone.materialaboutlibrary.ConvenienceBuilder
-import com.danielstone.materialaboutlibrary.MaterialAboutActivity
-import com.danielstone.materialaboutlibrary.items.MaterialAboutActionItem
-import com.danielstone.materialaboutlibrary.model.MaterialAboutCard
-import com.danielstone.materialaboutlibrary.model.MaterialAboutList
 import com.fastaccess.App
 import com.fastaccess.BuildConfig
-import com.fastaccess.R
-import com.fastaccess.helper.ActivityHelper
 import com.fastaccess.helper.BundleConstant
 import com.fastaccess.provider.tasks.version.CheckVersionService
-import com.fastaccess.provider.theme.ThemeEngine.applyForAbout
 import com.fastaccess.ui.modules.changelog.ChangelogBottomSheetDialog
 import com.fastaccess.ui.modules.main.donation.DonationActivity
-import com.fastaccess.ui.modules.repos.RepoPagerActivity
 import com.fastaccess.ui.modules.repos.issues.create.CreateIssueActivity
-import com.fastaccess.ui.modules.user.UserPagerActivity.Companion.startActivity
 import com.mikepenz.aboutlibraries.LibsBuilder
+import es.dmoral.toasty.Toasty
 
 /**
  * Created by danielstone on 12 Mar 2017, 1:57 AM
