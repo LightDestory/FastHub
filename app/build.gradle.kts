@@ -21,7 +21,7 @@ fun loadConfig(): HashMap<String, String> {
             val data = it.split("=")
                 configs[data[0]] = data[1]
         }
-    }} catch (e) {}
+    }} catch (e: Exception) {}
     return configs
 }
 
