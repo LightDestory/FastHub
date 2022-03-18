@@ -42,16 +42,17 @@ class EditRepoFilePresenter : BasePresenter<EditRepoFileMvp.View>(), EditRepoFil
         if (!text.isNullOrBlank() && !description.isNullOrBlank() && !filename.isNullOrBlank()) {
             model?.let { editRepoFileModel ->
                 val commitModel = CommitRequestModel(description, Base64.encodeToString(text.toByteArray(), Base64.DEFAULT), editRepoFileModel.sha!!, editRepoFileModel.ref)
+                val path = if (editRepoFileModel.path.isNullOrBlank()) {
+                    filename
+                } else {
+                    if (editRepoFileModel.path.endsWith("/")) {
+                        "${editRepoFileModel.path}$filename"
+                    } else {
+                        "${editRepoFileModel.path}"
+                    }
+                }
                 val observable = RestProvider.getContentService(isEnterprise).updateCreateFile(editRepoFileModel.login, editRepoFileModel.repoId,
-                        if (editRepoFileModel.path.isNullOrBlank()) {
-                            filename
-                        } else {
-                            if (editRepoFileModel.path.endsWith("/")) {
-                                "${editRepoFileModel.path}$filename"
-                            } else {
-                                "${editRepoFileModel.path}"
-                            }
-                        }, editRepoFileModel.ref, commitModel)
+                        path, editRepoFileModel.ref, commitModel)
                 makeRestCall(observable) { sendToView { it.onSuccessfullyCommitted() } }
             }
         }
