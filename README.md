@@ -105,16 +105,18 @@ Thanks  to [zeromake](https://github.com/zeromake/FastHub) we are now able to co
 
 We don't need anymore Android Studio 4.1 and Gradle 3.5! Hallelujah!
 
-To building a debug build you can just import the project and start the building process. All the needed IDs (for debugging purpose) are hard-coded inside the `build.gradle.kts`
-
-meanwhile the debug keys are located in `/app/keys_debug.jks`.
+To build a debug version you can just import the project and start the building process. All the needed IDs (for debugging purpose) are hard-coded inside the `build.gradle.kts` meanwhile the debug keys are located in `/app/keys_debug.jks`.
 
 To build your own release application you need to create a `secrets.properties` inside `/app/` with your custom credentials:
 
+- **STORE_PASSWORD**=`here`
+- **KEY_PASSWORD**=`here`
 - **GITHUB_CLIENT_ID**=`here`
 - **GITHUB_SECRET**=`here`
 - **IMGUR_CLIENT_ID**=`here`
 - **IMGUR_SECRET**=`here`
+
+Then, create your own keystore and put it in `/app/keys_release.jks`.
 
 ## :book: Spec / Open-Source libraries:
 
