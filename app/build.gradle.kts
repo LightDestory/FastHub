@@ -13,6 +13,7 @@ fun loadConfig(): HashMap<String, String> {
     configs["GITHUB_SECRET"] = "b2d158f949d3615078eaf570ff99eba81cfa1ff9"
     configs["IMGUR_CLIENT_ID"] = "5fced7f255e1dc9"
     configs["IMGUR_SECRET"] = "03025033403196a4b68b48f0738e67ef136ad64f"
+    try {
     val inputFile = rootProject.file("${rootProject.projectDir}\\app\\secrets.properties")
     (inputFile.exists()).let {
         println("Loading release configs")
@@ -20,7 +21,7 @@ fun loadConfig(): HashMap<String, String> {
             val data = it.split("=")
                 configs[data[0]] = data[1]
         }
-    }
+    }} catch (e) {}
     return configs
 }
 
