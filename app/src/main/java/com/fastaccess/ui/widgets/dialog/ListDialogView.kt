@@ -32,8 +32,12 @@ class ListDialogView<O : Parcelable> :
     interface OnSimpleItemSelection<T : Parcelable> {
         fun onItemSelected(item: T)
     }
+    interface OnSimpleItemLongSelection<T : Parcelable> {
+        fun onItemLongSelected(item: T)
+    }
 
     private var simpleItemSelection: OnSimpleItemSelection<O>? = null
+    private var simpleItemLongSelection: OnSimpleItemLongSelection<O>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,16 +68,27 @@ class ListDialogView<O : Parcelable> :
     @Suppress("UNCHECKED_CAST")
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (parentFragment != null && parentFragment is OnSimpleItemSelection<*>) {
-            simpleItemSelection = parentFragment as OnSimpleItemSelection<O>
-        } else if (context is OnSimpleItemSelection<*>) {
-            simpleItemSelection = context as OnSimpleItemSelection<O>
+        if (parentFragment != null) {
+            if (parentFragment is OnSimpleItemSelection<*>) {
+                simpleItemSelection = parentFragment as OnSimpleItemSelection<O>
+            }
+            if (parentFragment is OnSimpleItemLongSelection<*>) {
+                simpleItemLongSelection = parentFragment as OnSimpleItemLongSelection<O>
+            }
+        } else {
+            if (parentFragment is OnSimpleItemSelection<*>) {
+                simpleItemSelection = context as OnSimpleItemSelection<O>
+            }
+            if (parentFragment is OnSimpleItemLongSelection<*>) {
+                simpleItemLongSelection = context as OnSimpleItemLongSelection<O>
+            }
         }
     }
 
     override fun onDetach() {
         super.onDetach()
         simpleItemSelection = null
+        simpleItemLongSelection = null
     }
 
     override fun providePresenter(): BasePresenter<BaseMvp.FAView> {
@@ -81,13 +96,15 @@ class ListDialogView<O : Parcelable> :
     }
 
     override fun onItemClick(position: Int, v: View?, item: O) {
-        if (simpleItemSelection != null) {
-            simpleItemSelection!!.onItemSelected(item)
-        }
+        simpleItemSelection?.onItemSelected(item)
         dismiss()
     }
 
-    override fun onItemLongClick(position: Int, v: View?, item: O) {}
+    override fun onItemLongClick(position: Int, v: View?, item: O) {
+        simpleItemLongSelection?.onItemLongSelected(item)
+    }
+
+
     fun initArguments(title: String, objects: ArrayList<O>) {
         arguments = Bundler.start()
             .put(BundleConstant.EXTRA, title)

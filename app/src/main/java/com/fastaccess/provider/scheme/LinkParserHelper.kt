@@ -30,7 +30,7 @@ object LinkParserHelper {
         "contact", "about", "logos", "login", "pricing", ""
     )
 
-    val escapeSymbols: Map<String, String> = mapOf(
+    private val escapeSymbols: Map<String, String> = mapOf(
         "&quot;" to "\"", "&apos;" to "'",
         "&lt;" to "<", "&gt;" to ">", "&amp;" to "&")
 

@@ -1,5 +1,10 @@
 package com.fastaccess.ui.modules.repos.code.releases;
 
+import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
@@ -31,6 +36,7 @@ import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
+import es.dmoral.toasty.Toasty;
 
 /**
  * Created by Kosh on 03 Dec 2016, 3:56 PM
@@ -199,6 +205,15 @@ public class RepoReleasesFragment extends BaseFragment<RepoReleasesMvp.View, Rep
     @Override
     public void onItemSelected(SimpleUrlsModel item) {
         RestProvider.downloadFile(requireContext(), Objects.requireNonNull(item.getUrl()));
+    }
+
+    @Override
+    public void onItemLongSelected(@NonNull SimpleUrlsModel item) {
+        Activity activity = getActivity();
+        if (activity == null) return;
+        ClipboardManager clipboardManager = (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
+        clipboardManager.setPrimaryClip(ClipData.newRawUri(item.getUrl(), Uri.parse(item.getUrl())));
+        Toasty.info(activity, activity.getString(R.string.success_copied)).show();
     }
 
     @Override
