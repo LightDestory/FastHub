@@ -274,7 +274,7 @@ class FeedsViewHolder(
             .append(eventsModel.repo.name)
             .bold("#")
             .bold(pullRequest!!.number.toString())
-        if (comment!!.body != null) {
+        if (comment?.body != null) {
             stripMdText(description!!, comment.body.replace("\\r?\\n|\\r".toRegex(), " "))
             description!!.visibility = View.VISIBLE
         } else {
