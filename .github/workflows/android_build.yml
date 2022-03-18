@@ -18,8 +18,8 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 11
-      - name: Run Kotlin Linter
-        run: bash ./gradlew ktlintStagingDebugCheck
+      #- name: Run Kotlin Linter
+      #  run: bash ./gradlew ktlintStagingDebugCheck
       - name: Build APK
         run: bash ./gradlew assembleDebug --stacktrace
       #- name: Sign artifact
