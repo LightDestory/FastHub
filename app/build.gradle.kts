@@ -232,10 +232,6 @@ dependencies {
     implementation("com.github.matthiasrobbers:shortbread:1.4.0")
 //    kapt("com.github.matthiasrobbers:shortbread-compiler:1.4.0")
 
-    // bugly
-    implementation("com.tencent.bugly:crashreport:4.0.0")
-
-
     // objectbox
     implementation("io.objectbox:objectbox-kotlin:3.1.2")
     implementation("io.objectbox:objectbox-rxjava:3.1.2")
