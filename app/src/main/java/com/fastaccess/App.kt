@@ -12,7 +12,6 @@ import com.fastaccess.helper.TypeFaceHelper.generateTypeface
 import com.fastaccess.provider.colors.ColorsProvider
 import com.fastaccess.provider.crash.Report
 import com.fastaccess.provider.emoji.EmojiManager
-import com.fastaccess.provider.rest.DnsProvider
 import com.fastaccess.provider.tasks.notification.NotificationSchedulerJobTask
 import es.dmoral.toasty.Toasty
 
@@ -37,7 +36,6 @@ class App : Application() {
     private fun init() {
         Report.init(applicationContext)
         ObjectBox.init(applicationContext)
-        DnsProvider.instance.init(applicationContext)
         deleteDatabase("database.db")
         setupPreference()
         generateTypeface(this)

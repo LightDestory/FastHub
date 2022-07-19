@@ -17,7 +17,6 @@ object HttpProvider {
         for (inter in interceptor) {
             client.addInterceptor(inter)
         }
-        client.dns(DnsProvider.instance)
         return client.build()
     }
 }
